@@ -7,19 +7,6 @@ import { Connection } from '@solana/web3.js';
 
 describe('getBridgeUrl', () => {
   it('should generate the correct bridge URL with amount and address', async () => {
-    // Mock publicKey with a toString method
-    const mockPublicKey = {
-      toString: () => 'FakePublicKey123',
-    };
-    // Mock wallet with publicKey
-    const mockWallet = {
-      publicKey: mockPublicKey,
-    };
-    // Mock agent with wallet
-    const mockAgent = {
-      wallet: mockWallet,
-    };
-
     const rpcUrl = "https://api.devnet.solana.com";
     let keypair = Keypair.fromSecretKey(bs58.decode("48YuhkArpAaQA1FiyoaiXSvPst8C65rU5bikeWAK8uXCKrihSLVHruihtup5ppasR3nkmAvhae5mqokQ6MRpn33"))
     const wallet = new KeypairWallet(keypair, rpcUrl);
