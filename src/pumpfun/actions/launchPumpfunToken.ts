@@ -73,25 +73,25 @@ const launchPumpfunTokenAction: Action = {
       .min(0.00001)
       .default(0.00005)
       .describe("Priority fee in SOL"),
+    amount: z.number().min(0.0001).optional().describe("Amount of tokens to mint"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
-      const { tokenName, tokenTicker, description, imageUrl } = input;
+      const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount } = input;
       const result = await launchPumpFunToken(
         agent,
         tokenName,
         tokenTicker,
         description,
         imageUrl,
-        input,
+        amount, 
+        twitter,
+        telegram,
+        website
       );
 
       return {
         status: "success",
-        signature: result.signature,
-        mint: result.mint,
-        metadataUri: result.metadataUri,
-        transaction: result.signedTransaction ?? result.signature,
         message: "Successfully launched token on Pump.fun",
       };
     } catch (error: any) {

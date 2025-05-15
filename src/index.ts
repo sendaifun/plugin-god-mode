@@ -7,11 +7,11 @@ import sellAction from "./jupiter/actions/sell";
 
 
 // solana
-import balanceAction from "./solana/actions/balance";
-import tokenBalancesAction from "./solana/actions/tokenBalances";
-import transferAction from "./solana/actions/transfer";
-import transferSplAction from "./solana/actions/transfer_spl";
-import walletAddressAction from "./solana/actions/walletAddress";
+import balanceAction from "./wallet/actions/balance";
+import tokenBalancesAction from "./wallet/actions/tokenBalances";
+import transferAction from "./wallet/actions/transfer";
+import transferSplAction from "./wallet/actions/transfer_spl";
+import walletAddressAction from "./wallet/actions/walletAddress";
 
 
 // pumpfun
@@ -34,7 +34,7 @@ import {
   get_token_balance,
   transfer_spl,
   transfer,
-} from "./solana/tools";
+} from "./wallet/tools";
 
 // Define and export the plugin
 const GodModePlugin = {

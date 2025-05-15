@@ -1,103 +1,11 @@
-import { Keypair, VersionedTransaction } from "@solana/web3.js";
+import { Keypair, VersionedTransaction, TransactionMessage } from "@solana/web3.js";
+import { BN } from "bn.js";
 import {
-  PumpFunTokenOptions,
   SolanaAgentKit,
-  signOrSendTX,
 } from "solana-agent-kit";
-
-async function uploadMetadata(
-  tokenName: string,
-  tokenTicker: string,
-  description: string,
-  imageUrl: string,
-  options?: PumpFunTokenOptions,
-): Promise<any> {
-  // Create metadata object
-  const formData = new URLSearchParams();
-  formData.append("name", tokenName);
-  formData.append("symbol", tokenTicker);
-  formData.append("description", description);
-
-  formData.append("showName", "true");
-
-  if (options?.twitter) {
-    formData.append("twitter", options.twitter);
-  }
-  if (options?.telegram) {
-    formData.append("telegram", options.telegram);
-  }
-  if (options?.website) {
-    formData.append("website", options.website);
-  }
-
-  const imageResponse = await fetch(imageUrl);
-  const imageBlob = await imageResponse.blob();
-  const files = {
-    file: new File([imageBlob], "token_image.png", { type: "image/png" }),
-  };
-
-  // Create form data with both metadata and file
-  const finalFormData = new FormData();
-  // Add all metadata fields
-  for (const [key, value] of Array.from(formData.entries())) {
-    finalFormData.append(key, value);
-  }
-  // Add file if exists
-  if (files?.file) {
-    finalFormData.append("file", files.file);
-  }
-
-  const metadataResponse = await fetch("https://pump.fun/api/ipfs", {
-    method: "POST",
-    body: finalFormData,
-  });
-
-  if (!metadataResponse.ok) {
-    throw new Error(`Metadata upload failed: ${metadataResponse.statusText}`);
-  }
-
-  return await metadataResponse.json();
-}
-
-async function createTokenTransaction(
-  agent: SolanaAgentKit,
-  mintKeypair: Keypair,
-  metadataResponse: any,
-  options?: PumpFunTokenOptions,
-) {
-  const payload = {
-    publicKey: agent.wallet.publicKey.toBase58(),
-    action: "create",
-    tokenMetadata: {
-      name: metadataResponse.metadata.name,
-      symbol: metadataResponse.metadata.symbol,
-      uri: metadataResponse.metadataUri,
-    },
-    mint: mintKeypair.publicKey.toBase58(),
-    denominatedInSol: "true", // API expects string "true"
-    amount: options?.initialLiquiditySOL || 0.0001,
-    slippage: options?.slippageBps || 5,
-    priorityFee: options?.priorityFee || 0.00005,
-    pool: "pump",
-  };
-
-  const response = await fetch("https://pumpportal.fun/api/trade-local", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Transaction creation failed: ${response.status} - ${errorText}`,
-    );
-  }
-
-  return response;
-}
+import { REFERRAL_WALLET } from "../../global/constant";
+import { PumpSdk, BondingCurve , getBuySolAmountFromTokenAmount } from "@pump-fun/pump-sdk"
+import { PinataSDK } from "pinata";
 
 /**
  * Launch a token on Pump.fun
@@ -106,58 +14,125 @@ async function createTokenTransaction(
  * @param tokenTicker - Ticker of the token
  * @param description - Description of the token
  * @param imageUrl - URL of the token image
- * @param options - Optional token options (twitter, telegram, website, initialLiquiditySOL, slippageBps, priorityFee)
+ * @param amount - Amount of tokens to mint
+ * @param  twitter - Twitter handle (optional)
+ * @param telegram - Telegram group link (optional)
+ * @param website - Website URL (optional)
  * @returns - Signature of the transaction, mint address and metadata URI, if successful, else error
  */
 export async function launchPumpFunToken(
   agent: SolanaAgentKit,
-  tokenName: string,
-  tokenTicker: string,
+  name: string,
+  symbol: string,
   description: string,
   imageUrl: string,
-  options?: PumpFunTokenOptions,
+  amount: number,
+  twitter?: string,
+  telegram?: string,
+  website?: string
 ) {
   try {
-    const mintKeypair = Keypair.generate();
-    const metadataResponse = await uploadMetadata(
-      tokenName,
-      tokenTicker,
-      description,
-      imageUrl,
-      options,
-    );
-    const response = await createTokenTransaction(
-      agent,
-      mintKeypair,
-      metadataResponse,
-      options,
-    );
-    const transactionData = await response.arrayBuffer();
-    const tx = VersionedTransaction.deserialize(
-      new Uint8Array(transactionData),
-    );
+    const pumpSdk = new PumpSdk(agent.connection);
+    const mint = Keypair.generate();
 
-    if (agent.config.signOnly) {
-      return {
-        signedTransaction: await agent.wallet.signTransaction(tx),
-        mint: mintKeypair.publicKey.toBase58(),
-        metadataUri: metadataResponse.metadataUri,
-      };
+    const metadata = {
+      name: name,
+      symbol: symbol,
+      description: description,
+      image: imageUrl,
+      showName: true,
+      createdOn: "https://www.sendai.fun",
+      twitter: twitter,
+      telegram: telegram,
+      website: website,
     }
 
+    const metadataUri = await uploadJsonToPinata(metadata);
+
+    const ix = await pumpSdk.createInstruction(mint.publicKey, metadata.name, metadata.symbol, metadataUri, REFERRAL_WALLET, agent.wallet.publicKey);
+    
+    const global = await pumpSdk.fetchGlobal();
+
+    const bondingCurve: BondingCurve = {
+      virtualTokenReserves: global.initialVirtualTokenReserves,
+      virtualSolReserves: global.initialVirtualSolReserves,
+      realTokenReserves: global.initialRealTokenReserves,
+      realSolReserves: new BN(0),
+      tokenTotalSupply: new BN(global.tokenTotalSupply),
+      complete: false,
+      creator: agent.wallet.publicKey,
+    }
+
+    const buy_sol_amount = getBuySolAmountFromTokenAmount(global, bondingCurve, new BN(amount), true);
+
+    const buy_ix = await pumpSdk.buyInstructions(global, null, bondingCurve, mint.publicKey, agent.wallet.publicKey, new BN(amount), buy_sol_amount, 1, REFERRAL_WALLET);
     const { blockhash } = await agent.connection.getLatestBlockhash();
-    tx.message.recentBlockhash = blockhash;
+
+    const messageV0 = new TransactionMessage({
+      payerKey: agent.wallet.publicKey,
+      recentBlockhash: blockhash,
+      instructions: [ix, ...buy_ix],
+    }).compileToV0Message()
+
+    const tx = new VersionedTransaction(messageV0);
+    const agentSignedTx = await agent.wallet.signTransaction(tx);
+    agentSignedTx.sign([mint]);
+
+    // Serialize and encode transaction
+    const serializedTx = agentSignedTx.serialize();
+    const encodedTx = Buffer.from(serializedTx).toString('base64');
+    console.log('Base64 encoded transaction:', encodedTx);
+    const txHash = await agent.connection.sendTransaction(agentSignedTx);
+    console.log('Transaction hash:', txHash);
 
     return {
-      signature: (await signOrSendTX(agent, tx, [mintKeypair])) as string,
-      mint: mintKeypair.publicKey.toBase58(),
-      metadataUri: metadataResponse.metadataUri,
+      mint: mint.publicKey.toBase58(),
     };
   } catch (error) {
     console.error("Error in launchpumpfuntoken:", error);
     if (error instanceof Error && "logs" in error) {
       console.error("Transaction logs:", (error as any).logs);
     }
+    throw error;
+  }
+}
+
+/**
+ * Upload a JSON object to Pinata IPFS
+ * @param json - The JSON object to upload
+ * @returns - The IPFS link to the uploaded content
+ */
+export type UploadResponse = {
+  id: string;
+  name: string;
+  cid: string;
+  size: number;
+  created_at: string;
+  number_of_files: number;
+  mime_type: string;
+  group_id: string | null;
+  keyvalues: {
+    [key: string]: string;
+  };
+  vectorized: boolean;
+  network: string;
+};
+
+export async function uploadJsonToPinata(json: Record<string, any>): Promise<string> {
+  console.table({
+    pinataJwt: process.env.PINATA_JWT!,
+    pinataGateway: process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+  })
+  const pinata = new PinataSDK({
+    pinataJwt: process.env.PINATA_JWT!,
+    pinataGateway: process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+  });
+  try {
+    const upload: UploadResponse = await pinata.upload.public.json(json);
+    // Return the IPFS link using the returned cid
+    return `https://ipfs.io/ipfs/${upload.cid}`;
+  } catch (error) {
+    console.error("Error uploading to Pinata:", error);
     throw error;
   }
 }

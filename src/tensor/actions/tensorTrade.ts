@@ -13,7 +13,8 @@ const listNFTForSaleAction: Action = {
     "list on tensor",
     "tensor list",
   ],
-  description: "List an NFT for sale on Tensor marketplace",
+  description:
+    "List an NFT for sale on the Tensor marketplace. This action creates a new listing for the specified NFT mint address at the given price in SOL.",
   examples: [
     [
       {
@@ -69,7 +70,8 @@ const cancelNFTListingAction: Action = {
     "take down nft",
     "stop selling nft",
   ],
-  description: "Cancel an existing NFT listing on Tensor marketplace",
+  description:
+    "Cancel an existing NFT listing on the Tensor marketplace. This action removes the NFT from sale using its mint address.",
   examples: [
     [
       {
@@ -97,7 +99,7 @@ const cancelNFTListingAction: Action = {
 
       return {
         status: "success",
-        transaction: tx,
+        signature: tx,
         message: "Successfully cancelled NFT listing",
       };
     } catch (error: any) {
