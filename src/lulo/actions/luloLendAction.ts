@@ -1,6 +1,6 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { luloLend } from "../tools";
+import luloLend from "../tools/luloLend";
 
 const luloLendAction: Action = {
   name: "LULO_LEND",

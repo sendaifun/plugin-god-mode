@@ -1,6 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { getTokenByTicker } from "../tools";
+import getTokenDataByTicker from "../tools/getTokenDataByTicker";
 
 const tokenDataByTickerAction: Action = {
   name: "GET_TOKEN_DATA_OR_INFO_BY_TICKER_OR_SYMBOL",
@@ -38,7 +38,7 @@ const tokenDataByTickerAction: Action = {
       const ticker = input.ticker as string;
 
       // Use agent’s method to get token data by ticker
-      const tokenData = await getTokenByTicker(ticker);
+      const tokenData = await getTokenDataByTicker(ticker);
 
       return {
         status: "success",

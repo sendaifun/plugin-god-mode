@@ -1,6 +1,6 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { getWalletAddress } from "../tools";
+import getWalletAddress from "../tools/getWalletAddress";
 
 const walletAddressAction: Action = {
   name: "WALLET_ADDRESS",

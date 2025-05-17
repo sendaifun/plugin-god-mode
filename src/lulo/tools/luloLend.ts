@@ -1,5 +1,6 @@
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
+import { REFERRAL_WALLET } from "src/global/constant";
 
 /**
  * Lend tokens for yields using Lulo
@@ -8,7 +9,7 @@ import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
  * @param amount Amount to lend
  * @returns Transaction signature
  */
-export async function luloLend(
+export default async function luloLend(
   agent: SolanaAgentKit,
   amount: number,
 ) {
@@ -27,6 +28,7 @@ export async function luloLend(
           owner: agent.wallet.publicKey.toString(),
           mintAddress: USDC.toString(),
           regularAmount: amount,
+          referrer : REFERRAL_WALLET.toString()
         }),
       },
     );

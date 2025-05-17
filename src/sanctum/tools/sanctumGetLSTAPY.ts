@@ -6,7 +6,7 @@ import { SANCTUM_STAT_API_URI } from "../constants";
  * @returns APY of the LST
  */
 
-export async function sanctumGetLSTAPY(
+export default async function sanctumGetLSTAPY(
   inputs: string[],
 ): Promise<{ apys: Record<string, number> }> {
   try {

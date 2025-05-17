@@ -1,6 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { getPortfolio } from "../tools";
+import getPortfolio from "../tools/getPortfolio";
 import type { BirdeyePortfolioResponse } from "../types";
 
 const getPortfolioAction: Action = {

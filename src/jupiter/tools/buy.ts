@@ -16,7 +16,7 @@ import { type JupiterUltraOrderResponse } from "../types";
  * @param inputAmount Amount to swap (in token decimals)
  * @returns Transaction signature
  */
-export async function buy(
+export default async function buy(
   agent: SolanaAgentKit,
   outputMint: PublicKey,
   inputAmount: number,

@@ -1,6 +1,6 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { luloWithdraw } from "../tools";
+import initiateLuloWithdraw from "../tools/initiateLuloWithdraw";
 
 const luloWithdrawAction: Action = {
   name: "LULO_WITHDRAW",
@@ -21,7 +21,6 @@ const luloWithdrawAction: Action = {
     [
       {
         input: {
-          mintAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
           amount: 100,
         },
         output: {
@@ -34,20 +33,18 @@ const luloWithdrawAction: Action = {
     ],
   ],
   schema: z.object({
-    mintAddress: z.string().describe("SPL Mint address"),
     amount: z.number().positive().describe("Amount to lend"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
-      const mintAddress = input.mintAddress as string;
       const amount = input.amount as number;
 
-      const response = await luloWithdraw(agent, mintAddress, amount);
+      const response = await initiateLuloWithdraw(agent, amount);
 
       return {
         status: "success",
         transaction: response,
-        message: `Successfully withdraw ${amount} of token ${mintAddress}`,
+        message: `Successfully withdraw ${amount} of token USDC`,
       };
     } catch (error: any) {
       return {

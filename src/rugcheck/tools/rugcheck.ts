@@ -9,7 +9,7 @@ const BASE_URL = "https://api.rugcheck.xyz/v1";
  * @returns {Promise<TokenCheck>} The token summary report.
  * @throws {Error} If the API call fails.
  */
-export async function fetchTokenReportSummary(
+export default async function fetchTokenReportSummary(
   mint: string,
 ): Promise<TokenCheck> {
   try {

@@ -1,4 +1,4 @@
-import { VersionedTransaction } from "@solana/web3.js";
+import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
 
 /**
@@ -8,12 +8,12 @@ import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
  * @param amount Amount to withdraw
  * @returns Transaction signature
  */
-export async function initiateLuloWithdraw(
+export default async function initiateLuloWithdraw(
   agent: SolanaAgentKit,
-  mintAddress: string,
   amount: number,
 ) {
   try {
+    const USDC = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
     const owner = agent.wallet.publicKey.toBase58();
     const feePayer = owner;
     const response = await fetch(
@@ -27,7 +27,7 @@ export async function initiateLuloWithdraw(
         body: JSON.stringify({
           owner,
           feePayer,
-          mintAddress,
+          mintAddress: USDC.toString(),
           amount,
         }),
       },

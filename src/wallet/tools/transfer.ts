@@ -9,7 +9,7 @@ import type { SolanaAgentKit } from "solana-agent-kit";
  * @param amount Amount to transfer
  * @returns Transaction signature
  */
-export async function transfer(
+export default async function transfer(
   agent: SolanaAgentKit,
   to: PublicKey,
   amount: number,

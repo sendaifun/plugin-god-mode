@@ -1,4 +1,4 @@
-export * from "./fetch_price";
+export * from "./fetchPrice";
 export * from "./buy";
 export * from "./sell";
-export * from "./get_token_by_ticker";
+export * from "./getTokenDataByTicker";

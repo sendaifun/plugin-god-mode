@@ -17,7 +17,7 @@ import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
  * @param mint Optional mint address for SPL tokens
  * @returns Transaction signature
  */
-export async function transfer_spl(
+export default async function transfer_spl(
   agent: SolanaAgentKit,
   to: PublicKey,
   amount: number,

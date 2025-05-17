@@ -5,7 +5,7 @@ import type { PublicKey } from "@solana/web3.js";
  * @param tokenId The token mint address
  * @returns The price of the token quoted in USDC
  */
-export async function fetchPrice(tokenId: PublicKey): Promise<string> {
+export default async function fetchPrice(tokenId: PublicKey): Promise<string> {
   try {
     const response = await fetch(
       `https://api.jup.ag/price/v2?ids=${tokenId.toBase58()}`,

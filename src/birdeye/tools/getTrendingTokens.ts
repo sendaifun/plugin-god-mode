@@ -4,7 +4,7 @@ import type { BirdeyeTrendingTokensResponse } from "../types";
  * Fetch trending tokens on Solana using the Birdeye public API
  * @returns Promise resolving to the trending tokens data as returned by Birdeye
  */
-export async function getTrendingTokens(): Promise<BirdeyeTrendingTokensResponse> {
+export default async function getTrendingTokens(): Promise<BirdeyeTrendingTokensResponse> {
   const url =
     "https://public-api.birdeye.so/defi/token_trending?sort_by=rank&sort_type=asc&offset=0&limit=20";
 

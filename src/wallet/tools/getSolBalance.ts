@@ -7,7 +7,7 @@ import { SolanaAgentKit } from "solana-agent-kit";
  * @param agent - SolanaAgentKit instance
  * @returns Promise resolving to the balance as an object containing sol balance and token balances with their respective mints, symbols, names and decimals
  */
-export async function get_sol_balance(
+export default async function getSolBalance(
   agent: SolanaAgentKit,
 ): Promise<number> {
   const lamportsBalance = await agent.connection.getBalance(agent.wallet.publicKey);

@@ -1,6 +1,6 @@
 import { Action } from "solana-agent-kit";
 import { z } from "zod";
-import { fetchTokenReportSummary } from "../tools";
+import fetchTokenReportSummary from "../tools/rugcheck";
 
 const rugcheckAction: Action = {
   name: "RUGCHECK",

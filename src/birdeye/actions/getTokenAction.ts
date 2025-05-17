@@ -1,6 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { getTokenOverview } from "../tools/getToken";
+import getTokenOverview from "../tools/getToken";
 import type { BirdeyeTokenOverviewResponse } from "../types";
 
 const getTokenAction: Action = {

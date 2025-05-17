@@ -1,9 +1,9 @@
 import { PublicKey } from "@solana/web3.js";
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { get_sol_balance } from "../tools";
+import getSolBalance from "../tools/getSolBalance";
 
-const balanceAction: Action = {
+const getSolBalanceAction: Action = {
   name: "SOLANA_BALANCE",
   similes: [
     "check balance",
@@ -30,7 +30,7 @@ const balanceAction: Action = {
   ],
   schema: z.object({}),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
-    const balance = await get_sol_balance(
+    const balance = await getSolBalance(
       agent,
     );
 
@@ -42,4 +42,4 @@ const balanceAction: Action = {
   },
 };
 
-export default balanceAction;
+export default getSolBalanceAction;

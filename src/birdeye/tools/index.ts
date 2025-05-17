@@ -1,2 +1,2 @@
-export * from './getToken'
-export * from './getTrendingTokens'
+export * from "./getToken";
+export * from "./getTrendingTokens";

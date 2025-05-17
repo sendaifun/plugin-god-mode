@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { get_token_balance } from "../tools";
+import getTokenBalance from "../tools/getTokenBalance";
 
 const tokenBalancesAction: Action = {
   name: "TOKEN_BALANCE",
@@ -70,7 +70,7 @@ const tokenBalancesAction: Action = {
     mint: z.string(),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
-    const balance = await get_token_balance(
+    const balance = await getTokenBalance(
       agent,
       new PublicKey(input.mint),
     );

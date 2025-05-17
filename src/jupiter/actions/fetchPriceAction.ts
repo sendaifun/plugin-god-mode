@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { fetchPrice } from "../tools";
+import fetchPrice from "../tools/fetchPrice";
 
 const fetchPriceAction: Action = {
   name: "FETCH_PRICE",

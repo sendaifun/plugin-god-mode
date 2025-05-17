@@ -20,7 +20,7 @@ import { PinataSDK } from "pinata";
  * @param website - Website URL (optional)
  * @returns - Signature of the transaction, mint address and metadata URI, if successful, else error
  */
-export async function launchPumpFunToken(
+export default async function launchPumpFunToken(
   agent: SolanaAgentKit,
   name: string,
   symbol: string,

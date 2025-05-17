@@ -4,7 +4,7 @@ import type { JupiterTokenData } from "../types";
  * Fetches token data by ticker
  * @param ticker of the token
  */
-export async function getTokenByTicker(
+export default async function fetchPrice(
   ticker: string,
 ): Promise<JupiterTokenData> {
   try {

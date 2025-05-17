@@ -1,6 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { getTrendingTokens } from "../tools/getTrendingTokens";
+import getTrendingTokens  from "../tools/getTrendingTokens";
 import type { BirdeyeTrendingTokensResponse } from "../types";
 
 const getTrendingTokensAction: Action = {

@@ -1,9 +1,9 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
-import { getTopLSTTokens } from "../tools/getTopLST";
+import getTopLSTTokens from "../tools/getTopLST";
 import { z } from "zod";
 import type { JupiterTokenData } from "../../jupiter/types";
 
-export const getTopLSTAction: Action = {
+const getTopLSTAction: Action = {
   name: "GET_TOP_LST_TOKENS",
   similes: [
     "get top LST tokens",
@@ -58,3 +58,6 @@ export const getTopLSTAction: Action = {
     }
   },
 };
+
+
+export default getTopLSTAction;

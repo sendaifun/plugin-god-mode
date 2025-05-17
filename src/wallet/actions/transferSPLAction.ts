@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { transfer, transfer_spl } from "../tools";
+import transferSPL from "../tools/transferSPL";
 
 const transferAction: Action = {
   name: "TRANSFER_SPL_TOKEN",
@@ -66,7 +66,7 @@ const transferAction: Action = {
     const recipient = new PublicKey(input.to);
     const mintAddress = new PublicKey(input.mint);
 
-    const tx = await transfer_spl(agent, recipient, input.amount, mintAddress);
+    const tx = await transferSPL(agent, recipient, input.amount, mintAddress);
 
     return {
       status: "success",

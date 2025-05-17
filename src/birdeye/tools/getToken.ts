@@ -5,7 +5,7 @@ import type { BirdeyeTokenOverviewResponse } from "../types";
  * @param address The mint address of the token
  * @returns Promise resolving to the token overview data as returned by Birdeye
  */
-export async function getTokenOverview(address: string): Promise<BirdeyeTokenOverviewResponse> {
+export default async function getToken(address: string): Promise<BirdeyeTokenOverviewResponse> {
   const url = `https://public-api.birdeye.so/defi/token_overview?address=${address}`;
   try {
     const response = await fetch(url, {

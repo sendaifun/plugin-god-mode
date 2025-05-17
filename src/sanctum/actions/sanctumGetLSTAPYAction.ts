@@ -1,8 +1,8 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { sanctumGetLSTAPY } from "../tools";
+import sanctumGetLSTAPY from "../tools/sanctumGetLSTAPY";
 
-export const sanctumGetLSTAPYAction: Action = {
+const  sanctumGetLSTAPYAction: Action = {
   name: "GET_SANCTUM_APY",
   similes: ["get sanctum LST APY", "fetch sanctum LST APY"],
   description:
@@ -48,3 +48,6 @@ export const sanctumGetLSTAPYAction: Action = {
     }
   },
 };
+
+
+export default sanctumGetLSTAPYAction;

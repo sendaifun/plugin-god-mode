@@ -6,7 +6,7 @@ import type { BirdeyePortfolioResponse } from "../types";
  * @param agent - SolanaAgentKit instance
  * @returns Promise resolving to the portfolio data as returned by Birdeye
  */
-export async function getPortfolio(
+export default async function getPortfolio(
   agent: SolanaAgentKit,
 ): Promise<BirdeyePortfolioResponse> {
   const walletAddress = agent.wallet.publicKey.toBase58();

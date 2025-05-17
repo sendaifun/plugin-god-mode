@@ -1,6 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { getBridgeUrl } from "../tools/bridge";
+import getBridgeUrl from "../tools/bridge";
 
 const bridgeAction: Action = {
   name: "GET_BRIDGE_URL",

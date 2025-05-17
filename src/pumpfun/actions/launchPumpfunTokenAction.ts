@@ -1,6 +1,6 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import { launchPumpFunToken } from "../tools";
+import launchPumpFunToken from "../tools/launchPumpfunToken";
 
 const launchPumpfunTokenAction: Action = {
   name: "LAUNCH_PUMPFUN_TOKEN",

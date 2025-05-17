@@ -17,7 +17,7 @@ import { type JupiterUltraOrderResponse } from "../types";
  * @returns Transaction signature
  */
 
-export async function sell(
+export default async function sell(
   agent: SolanaAgentKit,
   inputAmount: number,
   inputMint: PublicKey,
