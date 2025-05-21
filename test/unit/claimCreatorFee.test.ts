@@ -1,4 +1,4 @@
-import launchPumpfunTokenAction from '../../src/pumpfun/tools/launchPumpfunToken';
+import claimCreatorFee from '../../src/pumpfun/tools/claimCreatorFee';
 import * as tools from '../../src/pumpfun/tools';
 import { SolanaAgentKit, KeypairWallet } from 'solana-agent-kit';
 import { Keypair, Connection } from '@solana/web3.js';
@@ -22,23 +22,15 @@ describe('launchPumpfunTokenAction', () => {
     agent.connection = connection; // ensure connection is set
   });
 
-  it('should return success when launchPumpFunToken succeeds (real agent)', async () => {
+    it('should return success when claimCreatorFee succeeds (real agent)', async () => {
     if (!agent) {
       return;
     }
 
-    const input = {
-      tokenName: 'Dark SEND',
-      tokenTicker: 'DARK SEND',
-      description: `This is a test token for testing pumpfun launch on [redacted] SEND platform, don't buy. you might loose money.`,
-      imageUrl: 'https://i.imgur.com/dzW590S.jpeg',
-      amount: 0,
-    };
-
-    const result = await launchPumpfunTokenAction(agent, input.tokenName, input.tokenTicker, input.description, input.imageUrl, input.amount);
+    const result = await claimCreatorFee(agent);
     // The actual result may vary depending on the on-chain response
-    expect(result.mint).toBeDefined();
+    expect(result.txHash).toBeDefined();
     // Optionally log the result for manual inspection
-    console.log('Real launchPumpfunTokenAction result:', result);
+    console.log('Real claimCreatorFee result:', result);
   });
 });

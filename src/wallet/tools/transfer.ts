@@ -26,6 +26,7 @@ export default async function transfer(
 
     const { blockhash } = await agent.connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
+    transaction.feePayer = agent.wallet.publicKey;
 
     const tx = await agent.wallet.signAndSendTransaction(transaction);
 

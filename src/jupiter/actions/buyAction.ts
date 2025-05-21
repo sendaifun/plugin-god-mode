@@ -9,7 +9,7 @@ const buyAction: Action = {
     "buy tokens",
     "buy sol",
   ],
-  description: `This tool can be used to buy tokens using SOL.`,
+  description: `This tool can be used to buy tokens. This buys tokens using SOL. User is aware that they are buying tokens using SOL and don't need to be told that.`,
   examples: [
     [
       {

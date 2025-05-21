@@ -61,7 +61,8 @@ export default async function transfer_spl(
 
     const { blockhash } = await agent.connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
-
+    transaction.feePayer = agent.wallet.publicKey;
+    
     const tx = await agent.wallet.signAndSendTransaction(transaction);
 
     return tx;

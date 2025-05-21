@@ -31,16 +31,16 @@ export default async function getTokenBalance(
 
   const tokenBalances = await Promise.all(
     tokenAccounts.value
-      .filter((v: any) => v.account.data.parsed.info.tokenAmount.uiAmount !== 0)
+      .filter((v: any) => v.account.data.parsed?.info?.tokenAmount?.uiAmount !== 0)
       .map(async (v: any) => {
-        const mintAddress = v.account.data.parsed.info.mint;
+        const mintAddress = v.account.data.parsed?.info?.mint;
         const mintInfo = await getTokenMetadata(agent.connection, mintAddress);
         return {
           tokenAddress: mintAddress,
           name: mintInfo.name ?? "",
           symbol: mintInfo.symbol ?? "",
-          balance: v.account.data.parsed.info.tokenAmount.uiAmount as number,
-          decimals: v.account.data.parsed.info.tokenAmount.decimals as number,
+          balance: v.account.data.parsed?.info?.tokenAmount?.uiAmount as number,
+          decimals: v.account.data.parsed?.info?.tokenAmount?.decimals as number,
         };
       }),
   );
