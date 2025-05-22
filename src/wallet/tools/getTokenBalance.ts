@@ -1,49 +1,41 @@
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { LAMPORTS_PER_SOL, type PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { SolanaAgentKit } from "solana-agent-kit";
-import { getTokenMetadata } from "./utils/tokenMetadata";
-
 /**
- * Get the token balances of a Solana wallet
- * @param agent - SolanaAgentKit instance
- * @param token_address -  SPL token mint address. If not provided, returns SOL balance
- * @returns Promise resolving to the balance as an object containing sol balance and token balances with their respective mints, symbols, names and decimals
+ * Get token accounts by mint address for a specific owner.
+ * @param mintAddress - The mint address of the token (string).
+ * @param ownerAddress - The owner's wallet address (string).
+ * @returns Promise resolving to the token accounts data from Helius.
  */
 export default async function getTokenBalance(
   agent: SolanaAgentKit,
-  mint: PublicKey,
-): Promise<Array<{
-    tokenAddress: string;
-    name: string;
-    symbol: string;
-    balance: number;
-    decimals: number;
-  }>> {
-  // Fetch only token accounts for the provided mint
-  const tokenAccounts = await agent.connection.getTokenAccountsByOwner(
-    agent.wallet.publicKey,
-    { mint },
-  );
+  mintAddress: PublicKey,
+): Promise<any> {
+  const rpcUrl = process.env.RPC_URL! || process.env.NEXT_PUBLIC_RPC_URL!;
 
-  if (tokenAccounts.value.length === 0) {
-    return [];
-  }
+  console.log(mintAddress.toString())
 
-  const tokenBalances = await Promise.all(
-    tokenAccounts.value
-      .filter((v: any) => v.account.data.parsed?.info?.tokenAmount?.uiAmount !== 0)
-      .map(async (v: any) => {
-        const mintAddress = v.account.data.parsed?.info?.mint;
-        const mintInfo = await getTokenMetadata(agent.connection, mintAddress);
-        return {
-          tokenAddress: mintAddress,
-          name: mintInfo.name ?? "",
-          symbol: mintInfo.symbol ?? "",
-          balance: v.account.data.parsed?.info?.tokenAmount?.uiAmount as number,
-          decimals: v.account.data.parsed?.info?.tokenAmount?.decimals as number,
-        };
-      }),
-  );
-
-  return tokenBalances;
+  const response = await fetch(rpcUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: '1',
+      method: 'getTokenAccountsByOwner',
+      params: [
+        agent.wallet.publicKey.toString(),
+        {
+          mint: mintAddress.toString()
+        },
+        {
+          encoding: 'jsonParsed'
+        }
+      ]
+    })
+  });
+  
+  const data = await response.json();
+  return data.result?.value[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount ?? 0
 }
+
+// Example usage:
+// getTokenAccountsByMint("8wXtPeU6557ETkp9WHFY1n1EcU6NxDvbAggHGsMYiHsB", "CEXq1uy9y15PL2Wb4vDQwQfcJakBGjaAjeuR2nKLj8dk").then(console.log);
