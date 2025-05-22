@@ -7,7 +7,7 @@ import type { BirdeyeTokenOverviewResponse } from "../types";
  */
 export default async function getToken(address: string): Promise<BirdeyeTokenOverviewResponse> {
   const url = `https://public-api.birdeye.so/defi/token_overview?address=${address}`;
-  const apiKey = process.env.BDS_API_KEY;
+  const apiKey = process.env.BDS_API_KEY || process.env.NEXT_PUBLIC_BDS_API_KEY;
 
   if (!apiKey) {
     throw new Error("BDS_API_KEY environment variable is not set.");
