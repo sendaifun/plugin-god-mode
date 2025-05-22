@@ -7,6 +7,11 @@ import type { BirdeyeTrendingTokensResponse } from "../types";
 export default async function getTrendingTokens(): Promise<BirdeyeTrendingTokensResponse> {
   const url =
     "https://public-api.birdeye.so/defi/token_trending?sort_by=rank&sort_type=asc&offset=0&limit=20";
+  const apiKey = process.env.BDS_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("BDS_API_KEY environment variable is not set.");
+  }
 
   try {
     const response = await fetch(url, {
@@ -14,6 +19,7 @@ export default async function getTrendingTokens(): Promise<BirdeyeTrendingTokens
       headers: {
         accept: "application/json",
         "x-chain": "solana",
+        "X-API-KEY": apiKey,
       },
     });
 

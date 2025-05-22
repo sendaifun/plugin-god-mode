@@ -23,7 +23,7 @@ export default async function fetchPrice(
       .toSorted((a, b) => (b.daily_volume ?? 0) - (a.daily_volume ?? 0))
       .find(
         (token: JupiterTokenData) =>
-          token.symbol.toLowerCase() === ticker.toLowerCase(),
+          token?.symbol?.toLowerCase() === ticker?.toLowerCase(),
       );
 
     if (!tokenData) {

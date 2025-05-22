@@ -3,12 +3,13 @@ import { z } from "zod";
 import getTokenDataByTicker from "../tools/getTokenDataByTicker";
 
 const tokenDataByTickerAction: Action = {
-  name: "GET_TOKEN_DATA_OR_INFO_BY_TICKER_OR_SYMBOL",
+  name: "GET_TOKEN_DATA_BY_TICKER",
   similes: [
-    "token data by symbol",
-    "fetch token info by symbol",
+    "token data by ticker",
+    "fetch token info by ticker",
     "lookup token ticker info",
     "get token info by ticker",
+    "get token data by ticker",
   ],
   description: "Get the token data for a given token ticker or symbol",
   examples: [

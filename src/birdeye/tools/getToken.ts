@@ -7,13 +7,19 @@ import type { BirdeyeTokenOverviewResponse } from "../types";
  */
 export default async function getToken(address: string): Promise<BirdeyeTokenOverviewResponse> {
   const url = `https://public-api.birdeye.so/defi/token_overview?address=${address}`;
+  const apiKey = process.env.BDS_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("BDS_API_KEY environment variable is not set.");
+  }
+
   try {
     const response = await fetch(url, {
       method: "GET",
       headers: {
         accept: "application/json",
         "x-chain": "solana",
-        "X-API-KEY": "9084650ca8444af1b7ddf30c134e0bd5",
+        "X-API-KEY": apiKey,
       },
     });
 

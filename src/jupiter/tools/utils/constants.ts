@@ -6,6 +6,7 @@ import { PublicKey } from "@solana/web3.js";
 export const TOKENS = {
   SOL: new PublicKey("So11111111111111111111111111111111111111112"),
   SEND: new PublicKey("SENDdRQtYMWaQrBroBrJ2Q53fgVuq95CV9UPGEvpCxa"),
+  USDC: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
 } as const;
 
 /**
