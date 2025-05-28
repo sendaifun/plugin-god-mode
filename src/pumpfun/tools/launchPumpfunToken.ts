@@ -1,10 +1,16 @@
-import { Keypair, VersionedTransaction, TransactionMessage } from "@solana/web3.js";
-import { BN } from "bn.js";
 import {
-  SolanaAgentKit,
-} from "solana-agent-kit";
+  Keypair,
+  VersionedTransaction,
+  TransactionMessage,
+} from "@solana/web3.js";
+import { BN } from "bn.js";
+import { SolanaAgentKit } from "solana-agent-kit";
 import { REFERRAL_WALLET } from "../../global/constant";
-import { PumpSdk, BondingCurve , getBuySolAmountFromTokenAmount } from "@pump-fun/pump-sdk"
+import {
+  PumpSdk,
+  BondingCurve,
+  getBuySolAmountFromTokenAmount,
+} from "@pump-fun/pump-sdk";
 import { PinataSDK } from "pinata";
 
 /**
@@ -29,7 +35,7 @@ export default async function launchPumpFunToken(
   amount: number,
   twitter?: string,
   telegram?: string,
-  website?: string
+  website?: string,
 ) {
   try {
     const pumpSdk = new PumpSdk(agent.connection);
@@ -45,12 +51,19 @@ export default async function launchPumpFunToken(
       twitter: twitter,
       telegram: telegram,
       website: website,
-    }
+    };
 
     const metadataUri = await uploadJsonToPinata(metadata);
 
-    const ix = await pumpSdk.createInstruction(mint.publicKey, metadata.name, metadata.symbol, metadataUri, REFERRAL_WALLET, agent.wallet.publicKey);
-    
+    const ix = await pumpSdk.createInstruction(
+      mint.publicKey,
+      metadata.name,
+      metadata.symbol,
+      metadataUri,
+      REFERRAL_WALLET,
+      agent.wallet.publicKey,
+    );
+
     const global = await pumpSdk.fetchGlobal();
 
     const bondingCurve: BondingCurve = {
@@ -61,29 +74,40 @@ export default async function launchPumpFunToken(
       tokenTotalSupply: new BN(global.tokenTotalSupply),
       complete: false,
       creator: agent.wallet.publicKey,
-    }
+    };
 
-    const buy_sol_amount = getBuySolAmountFromTokenAmount(global, bondingCurve, new BN(amount), true);
+    const buy_sol_amount = getBuySolAmountFromTokenAmount(
+      global,
+      bondingCurve,
+      new BN(amount),
+      true,
+    );
 
-    const buy_ix = await pumpSdk.buyInstructions(global, null, bondingCurve, mint.publicKey, agent.wallet.publicKey, new BN(amount), buy_sol_amount, 1, REFERRAL_WALLET);
+    const buy_ix = await pumpSdk.buyInstructions(
+      global,
+      null,
+      bondingCurve,
+      mint.publicKey,
+      agent.wallet.publicKey,
+      new BN(amount),
+      buy_sol_amount,
+      1,
+      REFERRAL_WALLET,
+    );
     const { blockhash } = await agent.connection.getLatestBlockhash();
 
     const messageV0 = new TransactionMessage({
       payerKey: agent.wallet.publicKey,
       recentBlockhash: blockhash,
       instructions: [ix, ...buy_ix],
-    }).compileToV0Message()
+    }).compileToV0Message();
 
     const tx = new VersionedTransaction(messageV0);
     const agentSignedTx = await agent.wallet.signTransaction(tx);
     agentSignedTx.sign([mint]);
 
-    // Serialize and encode transaction
-    const serializedTx = agentSignedTx.serialize();
-    const encodedTx = Buffer.from(serializedTx).toString('base64');
-    console.log('Base64 encoded transaction:', encodedTx);
-    const txHash = await agent.connection.sendTransaction(agentSignedTx);
-    console.log('Transaction hash:', txHash);
+    // Send the transaction
+    await agent.connection.sendTransaction(agentSignedTx);
 
     return {
       mint: mint.publicKey.toBase58(),
@@ -118,14 +142,18 @@ export type UploadResponse = {
   network: string;
 };
 
-export async function uploadJsonToPinata(json: Record<string, any>): Promise<string> {
+export async function uploadJsonToPinata(
+  json: Record<string, any>,
+): Promise<string> {
   console.table({
     pinataJwt: process.env.PINATA_JWT!,
-    pinataGateway: process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
-  })
+    pinataGateway:
+      process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+  });
   const pinata = new PinataSDK({
     pinataJwt: process.env.PINATA_JWT!,
-    pinataGateway: process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+    pinataGateway:
+      process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
   });
   try {
     const upload: UploadResponse = await pinata.upload.public.json(json);
