@@ -24,14 +24,19 @@ export default async function transfer(
       }),
     );
 
-    const { blockhash } = await agent.connection.getLatestBlockhash();
+    const { blockhash } = await agent.connection.getLatestBlockhash({
+      commitment: "confirmed",
+    });
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = agent.wallet.publicKey;
 
-    const tx = await agent.wallet.signAndSendTransaction(transaction);
+    const tx = await agent.wallet.signAndSendTransaction(transaction , {
+      skipPreflight: true,
+    });
 
     return tx;
   } catch (error: any) {
+    console.log(error);
     throw new Error(`Transfer failed: ${error.message}`);
   }
 }

@@ -1,7 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
 import getTokenOverview from "../tools/getToken";
-import type { BirdeyeTokenOverviewResponse } from "../types";
 
 const getTokenAction: Action = {
   name: "GET_TOKEN_OVERVIEW",
@@ -43,7 +42,7 @@ const getTokenAction: Action = {
   }),
   handler: async (_agent: SolanaAgentKit, input: Record<string, any>) => {
     const address = input.address as string;
-    const token: BirdeyeTokenOverviewResponse = await getTokenOverview(address);
+    const token: any = await getTokenOverview(_agent, address);
     return {
       status: "success",
       token,

@@ -47,7 +47,7 @@ export default async function launchPumpFunToken(
       website: website,
     }
 
-    const metadataUri = await uploadJsonToPinata(metadata);
+    const metadataUri = await uploadJsonToPinata(agent, metadata);
 
     const ix = await pumpSdk.createInstruction(mint.publicKey, metadata.name, metadata.symbol, metadataUri, REFERRAL_WALLET, agent.wallet.publicKey);
     
@@ -81,12 +81,13 @@ export default async function launchPumpFunToken(
     // Serialize and encode transaction
     const serializedTx = agentSignedTx.serialize();
     const encodedTx = Buffer.from(serializedTx).toString('base64');
-    console.log('Base64 encoded transaction:', encodedTx);
+
     const txHash = await agent.connection.sendTransaction(agentSignedTx);
-    console.log('Transaction hash:', txHash);
 
     return {
+      txHash: txHash,
       mint: mint.publicKey.toBase58(),
+      metadataUri: metadataUri,
     };
   } catch (error) {
     console.error("Error in launchpumpfuntoken:", error);
@@ -118,14 +119,14 @@ export type UploadResponse = {
   network: string;
 };
 
-export async function uploadJsonToPinata(json: Record<string, any>): Promise<string> {
+export async function uploadJsonToPinata(agent: SolanaAgentKit, json: Record<string, any>): Promise<string> {
   console.table({
-    pinataJwt: process.env.PINATA_JWT!,
-    pinataGateway: process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+    pinataJwt: agent.config.OTHER_API_KEYS?.PINATA_JWT || "",
+    pinataGateway: agent.config.OTHER_API_KEYS?.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
   })
   const pinata = new PinataSDK({
-    pinataJwt: process.env.PINATA_JWT!,
-    pinataGateway: process.env.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+    pinataJwt: agent.config.OTHER_API_KEYS?.PINATA_JWT || "",
+    pinataGateway: agent.config.OTHER_API_KEYS?.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
   });
   try {
     const upload: UploadResponse = await pinata.upload.public.json(json);

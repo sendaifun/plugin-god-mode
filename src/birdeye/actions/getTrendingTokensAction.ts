@@ -48,7 +48,7 @@ const getTrendingTokensAction: Action = {
   ],
   schema: z.object({}),
   handler: async (_agent: SolanaAgentKit, _input: Record<string, any>) => {
-    const tokens: BirdeyeTrendingTokensResponse = await getTrendingTokens();
+    const tokens: BirdeyeTrendingTokensResponse["data"]["tokens"] = await getTrendingTokens(_agent);
     return {
       status: "success",
       tokens,

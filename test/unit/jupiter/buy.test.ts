@@ -1,10 +1,9 @@
-import buy from '../../src/jupiter/tools/buy';
-import getTokenBalance from '../../src/wallet/tools/getTokenBalance';
+import buy from '../../../src/jupiter/tools/buy';
 import { SolanaAgentKit, KeypairWallet } from 'solana-agent-kit';
 import { Keypair, Connection, PublicKey } from '@solana/web3.js';
 import bs58 from 'bs58';
 import dotenv from 'dotenv';
-import { TOKENS } from '../../src/jupiter/tools/utils/constants';
+import { TOKENS } from '../../../src/jupiter/tools/utils/constants';
 
 dotenv.config();
 
@@ -46,13 +45,16 @@ describe('buyAction', () => {
 
     // Example: Buy USDC with SOL
     // You might want to use a less valuable token for actual testing or a specific test token if available
-    const outputMint = TOKENS.SEND; // Using USDC as an example output token
+    const outputMint = TOKENS.USDC; // Using USDC as an example output token
     const inputAmount = 0.0001; // Amount of SOL to spend, e.g., 0.0001 SOL
 
     try {
-      const result = await getTokenBalance(agent, outputMint)
-
-      console.log(result)
+      const resultSignature = await buy(agent, outputMint, inputAmount);
+      
+      expect(resultSignature).toBeDefined();
+      expect(typeof resultSignature).toBe('string');
+      console.log('Real buyAction result (transaction signature):', resultSignature);
+      console.log(`https://solscan.io/tx/${resultSignature}`);
 
       // Add a small delay to allow the transaction to be processed if needed for subsequent checks,
       // though for a simple signature check, it's often not necessary.

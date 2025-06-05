@@ -29,12 +29,7 @@ export default async function claimCreatorFee(
     const tx = new VersionedTransaction(messageV0);
 
     const serializedTx = tx.serialize()
-    const base64Tx = Buffer.from(serializedTx).toString('base64');
     const encodedTx = bs58.encode(serializedTx);
-    console.log('base64 encoded transaction:', base64Tx);
-    console.log('bs58 encoded transaction:', encodedTx);
-    // const txHash = await agent.connection.sendTransaction(tx);
-    // console.log('Transaction hash:', txHash);
 
     return {
       txHash: encodedTx,

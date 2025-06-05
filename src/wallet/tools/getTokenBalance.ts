@@ -10,9 +10,7 @@ export default async function getTokenBalance(
   agent: SolanaAgentKit,
   mintAddress: PublicKey,
 ): Promise<any> {
-  const rpcUrl = process.env.RPC_URL! || process.env.NEXT_PUBLIC_RPC_URL!;
-
-  console.log(mintAddress.toString())
+  const rpcUrl = agent.connection.rpcEndpoint;
 
   const response = await fetch(rpcUrl, {
     method: 'POST',
@@ -22,7 +20,7 @@ export default async function getTokenBalance(
       id: '1',
       method: 'getTokenAccountsByOwner',
       params: [
-        agent.wallet.publicKey.toString(),
+        agent.wallet.publicKey.toBase58(),
         {
           mint: mintAddress.toString()
         },
@@ -32,10 +30,8 @@ export default async function getTokenBalance(
       ]
     })
   });
-  
+    
   const data = await response.json();
+
   return data.result?.value[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount ?? 0
 }
-
-// Example usage:
-// getTokenAccountsByMint("8wXtPeU6557ETkp9WHFY1n1EcU6NxDvbAggHGsMYiHsB", "CEXq1uy9y15PL2Wb4vDQwQfcJakBGjaAjeuR2nKLj8dk").then(console.log);

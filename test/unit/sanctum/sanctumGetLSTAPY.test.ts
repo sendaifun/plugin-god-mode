@@ -1,4 +1,4 @@
-import { sanctumGetLSTAPY } from '../../src/sanctum/tools/sanctum_get_lst_apy';
+import sanctumGetLSTAPY from '../../../src/sanctum/tools/sanctumGetLSTAPY';
 
 describe('sanctumGetLSTAPY (integration, real API)', () => {
   it('should return APY mapping for real LST symbols', async () => {

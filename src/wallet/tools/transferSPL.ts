@@ -59,11 +59,15 @@ export default async function transfer_spl(
       ),
     );
 
-    const { blockhash } = await agent.connection.getLatestBlockhash();
+    const { blockhash } = await agent.connection.getLatestBlockhash({
+      commitment: "confirmed",
+    });
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = agent.wallet.publicKey;
     
-    const tx = await agent.wallet.signAndSendTransaction(transaction);
+    const tx = await agent.wallet.signAndSendTransaction(transaction , {
+      skipPreflight: true,
+    });
 
     return tx;
   } catch (error: any) {

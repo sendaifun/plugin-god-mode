@@ -22,7 +22,7 @@ export default async function luloLend(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": process.env.LULO_API_KEY!,
+          "x-api-key": agent.config.OTHER_API_KEYS?.LULO_API_KEY || "",
         },
         body: JSON.stringify({
           owner: agent.wallet.publicKey.toString(),

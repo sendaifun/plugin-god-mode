@@ -26,10 +26,14 @@ import luloWithdrawAction from "./lulo/actions/luloWithdrawAction";
 import initiateLuloWithdraw from "./lulo/tools/initiateLuloWithdraw";
 import luloLendAction from "./lulo/actions/luloLendAction";
 import luloLend from "./lulo/tools/luloLend";
+import luloGetApyAction from "./lulo/actions/luloGetApyAction";
+import luloGetApy from "./lulo/tools/luloGetApy";
 
 // pumpfun
 import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
 import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
+import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
+import claimCreatorFee from "./pumpfun/tools/claimCreatorFee";
 
 // rugcheck
 import rugcheckAction from "./rugcheck/actions/rugcheckAction";
@@ -45,14 +49,23 @@ import getTopLST from "./sanctum/tools/getTopLST";
 // solana
 import getPortfolioAction from "./wallet/actions/getPortfolioAction";
 import getPortfolio from "./wallet/tools/getPortfolio";
+
 import getSolBalance from "./wallet/tools/getSolBalance";
 import getSolBalanceAction from "./wallet/actions/getSolBalanceAction";
-import getTokenBalance from "./wallet/tools/getTokenBalance";
+import getSolPriceAction from "./wallet/actions/getSolPriceAction";
+
+
+import getSolPrice from "./wallet/tools/getSolPrice";
+
 import getTokenBalanceAction from "./wallet/actions/getTokenBalanceAction";
+import getTokenBalance from "./wallet/tools/getTokenBalance";
+
 import getWalletAddress from "./wallet/tools/getWalletAddress";
 import getWalletAddressAction from "./wallet/actions/getWalletAddressAction";
+
 import transferSPLAction from "./wallet/actions/transferSPLAction";
 import transferSPL from "./wallet/tools/transferSPL";
+
 import transferAction from "./wallet/actions/transferAction";
 import transfer from "./wallet/tools/transfer";
 
@@ -81,6 +94,9 @@ const GodModePlugin = {
     sanctumGetLSTAPY,
     getTopLST,
     getPortfolio,
+    getSolPrice,
+    luloGetApy,
+    claimCreatorFee,
   },
 
   // Combine all actions
@@ -104,6 +120,9 @@ const GodModePlugin = {
     sanctumGetLSTAPYAction,
     getTopLSTAction,
     getPortfolioAction,
+    getSolPriceAction,
+    luloGetApyAction,
+    claimCreatorFeeAction,
   ],
 
   // Initialize function

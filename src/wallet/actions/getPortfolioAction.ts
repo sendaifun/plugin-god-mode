@@ -51,7 +51,7 @@ const getPortfolioAction: Action = {
   ],
   schema: z.object({}),
   handler: async (agent: SolanaAgentKit) => {
-    const portfolio: BirdeyePortfolioResponse = await getPortfolio(agent);
+    const portfolio: BirdeyePortfolioResponse["data"] = await getPortfolio(agent);
     return {
       status: "success",
       portfolio,

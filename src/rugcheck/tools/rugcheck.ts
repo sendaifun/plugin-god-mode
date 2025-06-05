@@ -17,7 +17,11 @@ export default async function fetchTokenReportSummary(
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return await response.json();
+    const data = await response.json();
+
+    data.score = data.score == 1 ? "safe" : "unsafe";
+
+    return data;
   } catch (error: any) {
     console.error(
       `Error fetching report summary for token ${mint}:`,

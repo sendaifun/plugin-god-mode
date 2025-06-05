@@ -1,4 +1,4 @@
-import { getTopLSTTokens } from '../../src/sanctum/tools/getTopLST';
+import getTopLSTTokens from '../../../src/sanctum/tools/getTopLST';
 
 describe('getTopLSTTokens (integration, real API)', () => {
   it('should return an array of 10 LST tokens with expected properties', async () => {

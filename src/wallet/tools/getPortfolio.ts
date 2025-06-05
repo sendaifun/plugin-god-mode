@@ -1,5 +1,6 @@
 import { SolanaAgentKit } from "solana-agent-kit";
 import type { BirdeyePortfolioResponse } from "../types";
+import fs from "fs";
 
 /**
  * Fetch the portfolio of a Solana wallet using the Birdeye public API
@@ -8,8 +9,8 @@ import type { BirdeyePortfolioResponse } from "../types";
  */
 export default async function getPortfolio(
   agent: SolanaAgentKit,
-): Promise<BirdeyePortfolioResponse> {
-  const walletAddress = agent.wallet.publicKey.toBase58();
+): Promise<BirdeyePortfolioResponse["data"]> {
+  let walletAddress = agent.wallet.publicKey.toBase58();
   const url = `https://public-api.birdeye.so/v1/wallet/token_list?wallet=${walletAddress}`;
 
   try {
@@ -18,6 +19,7 @@ export default async function getPortfolio(
       headers: {
         accept: "application/json",
         "x-chain": "solana",
+        "x-api-key": agent.config.OTHER_API_KEYS?.BIRDEYE_API_KEY || "",
       },
     });
 
@@ -25,9 +27,11 @@ export default async function getPortfolio(
       throw new Error(`Failed to fetch portfolio: ${response.statusText}`);
     }
 
-    const data: BirdeyePortfolioResponse = await response.json();
+    const { data }: BirdeyePortfolioResponse = await response.json();
+
     return data;
   } catch (error: any) {
+    console.log(error);
     throw new Error(`Portfolio fetch failed: ${error.message}`);
   }
 }

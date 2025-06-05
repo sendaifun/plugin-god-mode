@@ -1,6 +1,6 @@
 import type { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import getBridgeUrl from "../tools/bridge";
+import bridge from "../tools/bridge";
 
 const bridgeAction: Action = {
   name: "GET_BRIDGE_URL",
@@ -32,7 +32,7 @@ const bridgeAction: Action = {
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     const amount = input.amount as number;
-    const url = await getBridgeUrl(agent,amount);
+    const url = await bridge(agent,amount);
     return {
       status: "success",
       url,
