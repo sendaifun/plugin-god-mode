@@ -148,14 +148,16 @@ export type UploadResponse = {
 };
 
 export async function uploadJsonToPinata(agent: SolanaAgentKit, json: Record<string, any>): Promise<string> {
-  console.table({
-    pinataJwt: agent.config.OTHER_API_KEYS?.PINATA_JWT || "",
-    pinataGateway: agent.config.OTHER_API_KEYS?.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
-  })
+
+  if (!agent.config.OTHER_API_KEYS?.PINATA_JWT) {
+    throw new Error("PINATA_JWT is not set");
+  }
+
   const pinata = new PinataSDK({
     pinataJwt: agent.config.OTHER_API_KEYS?.PINATA_JWT || "",
-    pinataGateway: agent.config.OTHER_API_KEYS?.PINATA_GATEWAY || "example-gateway.mypinata.cloud",
+    pinataGateway: agent.config.OTHER_API_KEYS?.PINATA_GATEWAY || "ipfs.sendai.fun",
   });
+
   try {
     const upload: UploadResponse = await pinata.upload.public.json(json);
     // Return the IPFS link using the returned cid

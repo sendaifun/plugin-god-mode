@@ -33,7 +33,7 @@ export default async function buy(
           `&amount=${scaledAmount}` +
           `&taker=${agent.wallet.publicKey.toString()}` +
           `&referralAccount=${JUP_REFERRAL_ADDRESS}` + 
-          `&referralFeeBps=100`,
+          `&referralFee=100`,
           {
             headers: {
               'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",

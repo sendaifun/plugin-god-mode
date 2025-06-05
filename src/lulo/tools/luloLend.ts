@@ -1,6 +1,6 @@
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
-import { REFERRAL_WALLET } from "src/global/constant";
+// import { REFERRAL_WALLET } from "src/global/constant";
 
 /**
  * Lend tokens for yields using Lulo
@@ -14,6 +14,8 @@ export default async function luloLend(
   amount: number,
 ) {
   try {
+    const REFERRAL_WALLET = new PublicKey("FPfGD3kA8ZXWWMTZHLcFDMhVzyWhqstbgTpg1KoR7Vk4");
+
     const USDC = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
 
     const response = await fetch(
@@ -39,11 +41,21 @@ export default async function luloLend(
       Buffer.from(transaction, "base64"),
     );
 
-    // Get a recent blockhash and set it
-    const { blockhash } = await agent.connection.getLatestBlockhash();
+    const { blockhash } = await agent.connection.getLatestBlockhash({
+      commitment: "confirmed",
+    });
     luloTxn.message.recentBlockhash = blockhash;
 
-    return signOrSendTX(agent, luloTxn);
+    const signature = await agent.wallet.signTransaction(luloTxn);
+
+    const tx = await agent.connection.sendTransaction(signature, {
+      skipPreflight: true,
+    });
+
+    console.log("tx", tx);
+
+    return tx;
+
   } catch (error: any) {
     throw new Error(`Lending failed: ${error.message}`);
   }
