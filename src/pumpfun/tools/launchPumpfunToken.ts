@@ -1,10 +1,16 @@
-import { Keypair, VersionedTransaction, TransactionMessage } from "@solana/web3.js";
-import { BN } from "bn.js";
 import {
-  SolanaAgentKit,
-} from "solana-agent-kit";
+  Keypair,
+  VersionedTransaction,
+  TransactionMessage,
+} from "@solana/web3.js";
+import { BN } from "bn.js";
+import { SolanaAgentKit } from "solana-agent-kit";
 import { REFERRAL_WALLET } from "../../global/constant";
-import { PumpSdk, BondingCurve , getBuySolAmountFromTokenAmount } from "@pump-fun/pump-sdk"
+import {
+  PumpSdk,
+  BondingCurve,
+  getBuySolAmountFromTokenAmount,
+} from "@pump-fun/pump-sdk";
 import { PinataSDK } from "pinata";
 
 /**
@@ -29,7 +35,7 @@ export default async function launchPumpFunToken(
   amount: number,
   twitter?: string,
   telegram?: string,
-  website?: string
+  website?: string,
 ) {
   try {
     const pumpSdk = new PumpSdk(agent.connection);
@@ -45,12 +51,19 @@ export default async function launchPumpFunToken(
       twitter: twitter,
       telegram: telegram,
       website: website,
-    }
+    };
 
     const metadataUri = await uploadJsonToPinata(agent, metadata);
 
-    const ix = await pumpSdk.createInstruction(mint.publicKey, metadata.name, metadata.symbol, metadataUri, REFERRAL_WALLET, agent.wallet.publicKey);
-    
+    const ix = await pumpSdk.createInstruction(
+      mint.publicKey,
+      metadata.name,
+      metadata.symbol,
+      metadataUri,
+      REFERRAL_WALLET,
+      agent.wallet.publicKey,
+    );
+
     const global = await pumpSdk.fetchGlobal();
 
     const bondingCurve: BondingCurve = {
@@ -61,18 +74,33 @@ export default async function launchPumpFunToken(
       tokenTotalSupply: new BN(global.tokenTotalSupply),
       complete: false,
       creator: agent.wallet.publicKey,
-    }
+    };
 
-    const buy_sol_amount = getBuySolAmountFromTokenAmount(global, bondingCurve, new BN(amount), true);
+    const buy_sol_amount = getBuySolAmountFromTokenAmount(
+      global,
+      bondingCurve,
+      new BN(amount),
+      true,
+    );
 
-    const buy_ix = await pumpSdk.buyInstructions(global, null, bondingCurve, mint.publicKey, agent.wallet.publicKey, new BN(amount), buy_sol_amount, 1, REFERRAL_WALLET);
+    const buy_ix = await pumpSdk.buyInstructions(
+      global,
+      null,
+      bondingCurve,
+      mint.publicKey,
+      agent.wallet.publicKey,
+      new BN(amount),
+      buy_sol_amount,
+      1,
+      REFERRAL_WALLET,
+    );
     const { blockhash } = await agent.connection.getLatestBlockhash();
 
     const messageV0 = new TransactionMessage({
       payerKey: agent.wallet.publicKey,
       recentBlockhash: blockhash,
       instructions: [ix, ...buy_ix],
-    }).compileToV0Message()
+    }).compileToV0Message();
 
     const tx = new VersionedTransaction(messageV0);
     const agentSignedTx = await agent.wallet.signTransaction(tx);
