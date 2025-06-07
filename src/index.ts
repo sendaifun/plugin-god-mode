@@ -69,6 +69,10 @@ import transferSPL from "./wallet/tools/transferSPL";
 import transferAction from "./wallet/actions/transferAction";
 import transfer from "./wallet/tools/transfer";
 
+// onramp
+import onramp from "./wallet/tools/onramp";
+import onrampAction from "./wallet/actions/onrampAction";
+
 // Define and export the plugin
 const GodModePlugin = {
   name: "godmode",
@@ -97,6 +101,7 @@ const GodModePlugin = {
     getSolPrice,
     luloGetApy,
     claimCreatorFee,
+    onramp,
   },
 
   // Combine all actions
@@ -123,6 +128,7 @@ const GodModePlugin = {
     getSolPriceAction,
     luloGetApyAction,
     claimCreatorFeeAction,
+    onrampAction,
   ],
 
   // Initialize function
