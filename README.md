@@ -2,68 +2,77 @@
 
 Just like the legendary cheat code, GOD Mode gives you access to every essential Solana action in one place. Whether you're trading, launching tokens, analyzing security, or managing your portfolio, this plugin is designed to be the only toolkit you'll ever need for Solana.
 
-
 ## Features (as available)
 
 1. **Transfer** — Instantly transfer SOL and SPL tokens (**0% fees**) 
-2. **Buy action, from SOL** — Buy tokens using SOL via JUP ultra API (**0.5% fees**) 
-3. **Sell action, to SOL** — Sell tokens for SOL via JUP ultra API (**0.5% fees**) 
-4. **Portfolio** — View your portfolio and balances via RPC (**read-only, no fees**) 
-5. **Stake via Sanctum** — Stake SOL and interact with LSTs via Sanctum (Blinks or Direct API) (**0.1% + read**) 
-6. **Play RPS game** — Play Rock-Paper-Scissors via SendArcade (Blinks) 
-7. **Lend / Withdraw USDC** — Lend or withdraw USDC via Lulo (**0.1% fee**) 
-8. **Bridge** — Bridge assets with referral fees via de-bridge (redirect to website with prefilled details) 
-9. **Pump.fun launch** — Launch new tokens on pump.fun 
-10. **Token info** — Get token information via Birdeye 
-11. **Perpetuals** — Trade perps via Drift or Ranger 
-12. **Mint and trade NFT** — Mint new NFTs (Metaplex) and buy from marketplace (Tensor) 
-13. **Messari context** — Get token/project context via Messari AI 
-14. **Jito Bundles** — Interact with Jito bundles 
-15. **Onramp** — Using Moonpay
+2. **Buy/Sell** — Trade tokens using SOL via Jupiter Ultra API (**0.5% fees**) 
+3. **Portfolio Management** — View your portfolio, balances, and SOL price via RPC (**read-only, no fees**) 
+4. **Token Information** — Get token data, trending tokens, and price information via Birdeye 
+5. **Lending** — Lend/withdraw USDC via Lulo with APY tracking (**0.1% fee**) 
+6. **Pump.fun** — Launch new tokens and manage creator fees on pump.fun 
+7. **Security Analysis** — Check token security via Rugcheck 
+8. **Staking** — Get LST APY and top LST information via Sanctum (**0.1% + read**) 
+9. **Bridge** — Bridge assets with referral fees via DeBridge (redirect to website with prefilled details) 
+10. **Onramp** — Fiat-to-crypto onramp functionality 
 
 ---
 
 ## Tools Available (with Fees)
 
-### Transfers & Portfolio
-- `transfer` — Transfer SOL or SPL tokens (**0% fees**)
-- `portfolio` — View your portfolio and balances (**read-only, no fees**)
+### Wallet & Portfolio Management
+- `transfer` — Transfer SOL between wallets (**0% fees**)
+- `transferSPL` — Transfer SPL tokens (**0% fees**)
+- `getPortfolio` — View your complete portfolio (**read-only, no fees**)
+- `getSolBalance` — Get SOL balance for any wallet (**read-only, no fees**)
+- `getTokenBalance` — Get SPL token balance (**read-only, no fees**)
+- `getWalletAddress` — Get your wallet address (**read-only, no fees**)
+- `getSolPrice` — Get current SOL price (**read-only, no fees**)
+- `onramp` — Fiat-to-crypto onramp
 
-### Jupiter (JUP Ultra API)
+### Jupiter Trading
 - `buy` — Buy tokens using SOL (**0.5% fees**)
 - `sell` — Sell tokens for SOL (**0.5% fees**)
+- `fetchPrice` — Get token price information (**read-only, no fees**)
+- `getTokenDataByTicker` — Get token data by ticker symbol (**read-only, no fees**)
 
-### Sanctum
-- `stake` — Stake SOL and interact with LSTs (**0.1% + read**)
+### Birdeye Token Intelligence
+- `getToken` — Get comprehensive token information
+- `getTrendingTokens` — Get currently trending tokens
 
-### SendArcade
-- `playRPS` — Play Rock-Paper-Scissors game
+### Lulo Lending
+- `luloLend` — Lend USDC (**0.1% fee**)
+- `initiateLuloWithdraw` — Withdraw USDC (**0.1% fee**)
+- `getLuloBalance` — Check your Lulo balance (**read-only, no fees**)
+- `luloGetApy` — Get current lending APY (**read-only, no fees**)
 
-### Lulo
-- `lendUSDC` — Lend USDC (**0.1% fee**)
-- `withdrawUSDC` — Withdraw USDC (**0.1% fee**)
+### Pump.fun Token Launch
+- `launchPumpFunToken` — Launch new tokens on pump.fun
+- `claimCreatorFee` — Claim creator fees from launched tokens
+- `getPendingCreatorFee` — Check pending creator fees (**read-only, no fees**)
 
-### De-bridge
-- `bridge` — Bridge assets (referral fees, redirects to website)
+### Security & Analysis
+- `rugcheck` — Analyze token security and potential risks (**read-only, no fees**)
 
-### Pump.fun
-- `launchPumpFunToken` — Launch new tokens
+### Sanctum LST Operations
+- `sanctumGetLSTAPY` — Get LST APY information (**read-only, no fees**)
+- `getTopLST` — Get top performing LSTs (**read-only, no fees**)
 
-### Birdeye
-- `getTokenInfo` — Get token information
+### DeBridge Cross-Chain
+- `bridge` — Bridge assets cross-chain (referral fees, redirects to website)
 
-### Drift / Ranger
-- `tradePerps` — Trade perpetuals
+## Available Modules (Future Integration)
 
-### Metaplex / Tensor
-- `mintNFT` — Mint new NFTs
-- `buyNFT` — Buy NFTs from marketplace
+The following modules are present in the codebase and may be integrated in future versions:
 
-### Messari AI
-- `getContext` — Get token/project context
+- **Metaplex** — NFT minting, collection deployment, and asset management
+- **Tensor** — NFT marketplace trading
+- **Messari** — Token and project context via Messari AI
+- **Drift** — Perpetuals trading and vault operations
 
-### Jito
-- `jitoBundles` — Interact with Jito bundles
+## Installation & Usage
 
+For detailed information about each action and its parameters, check the individual action files in the source code or refer to the official documentation at [docs.sendai.fun](https://docs.sendai.fun).
 
-For more detailed information about each action and its parameters, check the individual action files in the source code or refer to the official documentation at [docs.sendai.fun](https://docs.sendai.fun).
+---
+
+**Note**: Fees mentioned are indicative and may vary. Always check current fee structures before executing transactions.
