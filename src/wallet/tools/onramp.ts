@@ -1,22 +1,19 @@
 import { SolanaAgentKit } from "solana-agent-kit";
-import { MoonPay } from '@moonpay/moonpay-node';
+import crypto from 'crypto';
 
 export default function onramp(agent: SolanaAgentKit, amount?: number): string {
 
-    const moonpay = new MoonPay(
-        agent.config.OTHER_API_KEYS?.MOONPAY_API_KEY!
-    );
+    const publicKey = agent.config.OTHER_API_KEYS?.MOONPAY_PUBLIC_KEY!
+    const secretKey = agent.config.OTHER_API_KEYS?.MOONPAY_API_KEY!
 
-    const url =  moonpay.url.generate({
-        flow: 'buy',
-        params : {
-            apiKey: agent.config.OTHER_API_KEYS?.MOONPAY_PUBLIC_KEY!,
-            walletAddress: agent.wallet.publicKey.toBase58(),
-            baseCurrencyAmount: amount ? amount.toString() : undefined,
-            baseCurrencyCode: 'sol',
-            theme: 'dark',
-        }
-    })
+    const originalUrl = `https://buy.moonpay.com/?apiKey=${publicKey}&defaultCurrencyCode=usdc_sol&walletAddress=${agent.wallet.publicKey.toBase58()}`
 
-    return url;
+    const signature = crypto
+    .createHmac('sha256', secretKey)  // Use your secret key
+    .update(new URL(originalUrl).search)  // Use the query string part of the URL
+    .digest('base64');  // Convert the result to a base64 string
+  
+    const urlWithSignature = `${originalUrl}&signature=${encodeURIComponent(signature)}`;  // Add the signature to the URL
+
+    return urlWithSignature;
 }

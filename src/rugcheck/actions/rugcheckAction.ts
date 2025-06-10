@@ -27,7 +27,7 @@ const rugcheckAction: Action = {
     ],
   ],
   schema: z.object({
-    mint: z.string().min(1).describe("The token mint address"),
+    mint: z.string().min(32).describe("The token mint address"),
   }),
   handler: async (_agent, input) => {
     try {

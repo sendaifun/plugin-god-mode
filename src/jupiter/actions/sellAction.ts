@@ -2,6 +2,7 @@ import { PublicKey } from "@solana/web3.js";
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
 import sell from "../tools/sell";
+import { TOKENS } from "../tools/utils/constants";
 
 const sellAction: Action = {
   name: "SELL",
@@ -14,7 +15,7 @@ const sellAction: Action = {
     [
       {
         input: {
-          outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+          inputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
           inputAmount: 1,
         },
         output: {
@@ -32,10 +33,8 @@ const sellAction: Action = {
     [
       {
         input: {
-          outputMint: "So11111111111111111111111111111111111111112",
           inputAmount: 100,
           inputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-          slippageBps: 100,
         },
         output: {
           status: "success",
@@ -46,15 +45,13 @@ const sellAction: Action = {
           inputToken: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
           outputToken: "So11111111111111111111111111111111111111112",
         },
-        explanation: "Swap 100 USDC for SOL with 1% slippage",
+        explanation: "Swap 100 USDC for SOL",
       },
     ],
   ],
   schema: z.object({
-    outputMint: z.string().min(32, "Invalid output mint address"),
-    inputAmount: z.number().positive("Input amount must be positive"),
-    inputMint: z.string().min(32, "Invalid input mint address").optional(),
-    slippageBps: z.number().min(0).max(10000).optional(),
+    inputMint: z.string().min(32, "Invalid input mint address"),
+    inputAmount: z.number().positive("Input amount must be positive")
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     const tx = await sell(
@@ -68,8 +65,8 @@ const sellAction: Action = {
       message: "Trade executed successfully",
       transaction: tx,
       inputAmount: input.inputAmount,
-      inputToken: input.inputMint || "SOL",
-      outputToken: input.outputMint,
+      inputToken: input.inputMint,
+      outputToken: TOKENS.SOL.toString(),
     };
   },
 };

@@ -30,7 +30,6 @@ const getSolPriceAction: Action = {
     ],
   ],
   schema: z.object({
-    // currency: z.string().optional().default("USD"), // Future: allow specifying currency
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     const price = await getSolPrice();

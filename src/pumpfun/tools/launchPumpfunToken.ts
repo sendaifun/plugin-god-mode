@@ -10,6 +10,7 @@ import {
   PumpSdk,
   BondingCurve,
   getBuySolAmountFromTokenAmount,
+  getBuyTokenAmountFromSolAmount,
 } from "@pump-fun/pump-sdk";
 import { PinataSDK } from "pinata";
 
@@ -20,7 +21,7 @@ import { PinataSDK } from "pinata";
  * @param tokenTicker - Ticker of the token
  * @param description - Description of the token
  * @param imageUrl - URL of the token image
- * @param amount - Amount of tokens to mint
+ * @param amount - Amount of SOL to buy tokens
  * @param  twitter - Twitter handle (optional)
  * @param telegram - Telegram group link (optional)
  * @param website - Website URL (optional)
@@ -76,7 +77,7 @@ export default async function launchPumpFunToken(
       creator: agent.wallet.publicKey,
     };
 
-    const buy_sol_amount = getBuySolAmountFromTokenAmount(
+    const buy_token_amount = getBuyTokenAmountFromSolAmount(
       global,
       bondingCurve,
       new BN(amount),
@@ -89,8 +90,8 @@ export default async function launchPumpFunToken(
       bondingCurve,
       mint.publicKey,
       agent.wallet.publicKey,
+      buy_token_amount,
       new BN(amount),
-      buy_sol_amount,
       1,
       REFERRAL_WALLET,
     );

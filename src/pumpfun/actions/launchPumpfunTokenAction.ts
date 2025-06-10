@@ -25,19 +25,15 @@ const launchPumpfunTokenAction: Action = {
           twitter: "@sampletoken",
           telegram: "t.me/sampletoken",
           website: "https://sampletoken.com",
-          initialLiquiditySOL: 0.1,
-          slippageBps: 10,
-          priorityFee: 0.0001,
         },
         output: {
           status: "success",
-          signature: "2ZE7Rz...",
-          mint: "7nxQB...",
-          metadataUri: "https://arweave.net/...",
+          tokenAddress: "7nxQB...",
+          txHash: "2ZE7Rz...",
           message: "Successfully launched token on Pump.fun",
         },
         explanation:
-          "Launch a new token with custom metadata and 0.1 SOL initial liquidity",
+          "Launch a new token with custom metadata",
       },
     ],
   ],
@@ -57,23 +53,7 @@ const launchPumpfunTokenAction: Action = {
     twitter: z.string().optional().describe("Twitter handle (optional)"),
     telegram: z.string().optional().describe("Telegram group link (optional)"),
     website: z.string().url().optional().describe("Website URL (optional)"),
-    initialLiquiditySOL: z
-      .number()
-      .min(0.0001)
-      .default(0.0001)
-      .describe("Initial liquidity in SOL"),
-    slippageBps: z
-      .number()
-      .min(1)
-      .max(1000)
-      .default(5)
-      .describe("Slippage tolerance in basis points"),
-    priorityFee: z
-      .number()
-      .min(0.00001)
-      .default(0.00005)
-      .describe("Priority fee in SOL"),
-    amount: z.number().min(0.0001).optional().describe("Amount of tokens to mint"),
+    amount: z.number().min(0.0001).optional().describe("Amount of SOL to buy tokens"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
@@ -93,6 +73,8 @@ const launchPumpfunTokenAction: Action = {
       return {
         status: "success",
         message: "Successfully launched token on Pump.fun",
+        tokenAddress: result.mint,
+        txHash: result.txHash,
       };
     } catch (error: any) {
       return {

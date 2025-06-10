@@ -67,7 +67,7 @@ const tokenBalancesAction: Action = {
     ],
   ],
   schema: z.object({
-    mint: z.string(),
+    mint: z.string().min(32),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     const balance = await getTokenBalance(

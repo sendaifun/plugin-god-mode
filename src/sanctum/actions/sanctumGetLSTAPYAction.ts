@@ -29,7 +29,7 @@ const  sanctumGetLSTAPYAction: Action = {
     ],
   ],
   schema: z.object({
-    inputs: z.array(z.string()),
+    inputs: z.array(z.string().min(32)),
   }),
   handler: async (_agent: SolanaAgentKit, input: Record<string, any>) => {
     try {

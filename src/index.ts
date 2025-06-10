@@ -28,12 +28,16 @@ import luloLendAction from "./lulo/actions/luloLendAction";
 import luloLend from "./lulo/tools/luloLend";
 import luloGetApyAction from "./lulo/actions/luloGetApyAction";
 import luloGetApy from "./lulo/tools/luloGetApy";
+import luloGetBalanceAction from "./lulo/actions/luloGetBalanceAction";
+import getLuloBalance from "./lulo/tools/getLuloBalance";
 
 // pumpfun
 import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
 import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
 import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
 import claimCreatorFee from "./pumpfun/tools/claimCreatorFee";
+import getPendingCreatorFeeAction from "./pumpfun/actions/getPendingCreatorFeeAction";
+import getPendingCreatorFee from "./pumpfun/tools/getPendingCreatorFee";
 
 // rugcheck
 import rugcheckAction from "./rugcheck/actions/rugcheckAction";
@@ -88,6 +92,7 @@ const GodModePlugin = {
     getTokenDataByTicker,
     initiateLuloWithdraw,
     luloLend,
+    getLuloBalance,
     getSolBalance,
     getWalletAddress,
     getTokenBalance,
@@ -101,6 +106,7 @@ const GodModePlugin = {
     getSolPrice,
     luloGetApy,
     claimCreatorFee,
+    getPendingCreatorFee,
     onramp,
   },
 
@@ -115,6 +121,7 @@ const GodModePlugin = {
     getTokenDataByTickerAction,
     luloWithdrawAction,
     luloLendAction,
+    luloGetBalanceAction,
     getSolBalanceAction,
     getTokenBalanceAction,
     getWalletAddressAction,
@@ -128,6 +135,7 @@ const GodModePlugin = {
     getSolPriceAction,
     luloGetApyAction,
     claimCreatorFeeAction,
+    getPendingCreatorFeeAction,
     onrampAction,
   ],
 

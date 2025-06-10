@@ -35,7 +35,6 @@ const buyAction: Action = {
           outputMint: "So11111111111111111111111111111111111111112",
           inputAmount: 100,
           inputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-          slippageBps: 100,
         },
         output: {
           status: "success",
@@ -46,14 +45,13 @@ const buyAction: Action = {
           inputToken: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
           outputToken: "So11111111111111111111111111111111111111112",
         },
-        explanation: "Swap 100 USDC for SOL with 1% slippage",
+        explanation: "Swap 100 USDC for SOL",
       },
     ],
   ],
   schema: z.object({
     outputMint: z.string().min(32, "Invalid output mint address"),
     inputAmount: z.number().positive("Input amount must be positive"),
-    slippageBps: z.number().min(0).max(10000).optional(),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     const tx = await buy(
