@@ -1,4 +1,4 @@
-import type { TokenCheck } from "solana-agent-kit";
+import type { SolanaAgentKit, TokenCheck } from "solana-agent-kit";
 
 const BASE_URL = "https://api.rugcheck.xyz/v1";
 
@@ -10,6 +10,7 @@ const BASE_URL = "https://api.rugcheck.xyz/v1";
  * @throws {Error} If the API call fails.
  */
 export default async function fetchTokenReportSummary(
+  _agent: SolanaAgentKit,
   mint: string,
 ): Promise<TokenCheck> {
   try {

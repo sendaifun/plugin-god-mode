@@ -1,5 +1,6 @@
 import axios from "redaxios";
 import { SANCTUM_STAT_API_URI } from "../constants";
+import { SolanaAgentKit } from "solana-agent-kit";
 
 /**
  * @param inputs: Array of mint addresses or symbols of the LST to get apy for registered in sanctum
@@ -7,6 +8,7 @@ import { SANCTUM_STAT_API_URI } from "../constants";
  */
 
 export default async function sanctumGetLSTAPY(
+  _agent: SolanaAgentKit,
   inputs: string[],
 ): Promise<{ apys: Record<string, number> }> {
   try {

@@ -1,3 +1,4 @@
+import { SolanaAgentKit } from "solana-agent-kit";
 import type { JupiterTokenData } from "../types";
 
 /**
@@ -5,6 +6,7 @@ import type { JupiterTokenData } from "../types";
  * @param ticker of the token
  */
 export default async function fetchPrice(
+  _agent: SolanaAgentKit,
   ticker: string,
 ): Promise<JupiterTokenData> {
   try {

@@ -1,10 +1,11 @@
 import axios from "redaxios";
+import { SolanaAgentKit } from "solana-agent-kit";
 
 /**
  * Fetches the top 10 LST tokens from Jupiter's token list endpoint, sorted by daily_volume.
  * @returns Array of top 10 LST token objects in the specified format.
  */
-export default async function getTopLSTTokens(): Promise<any[]> {
+export default async function getTopLSTTokens(_agent: SolanaAgentKit): Promise<any[]> {
   try {
     const response = await axios.get(
       "https://tokens.jup.ag/tokens?tags=lst"
