@@ -1,11 +1,12 @@
 import type { PublicKey } from "@solana/web3.js";
+import { SolanaAgentKit } from "solana-agent-kit";
 
 /**
  * Fetch the price of a given token quoted in USDC using Jupiter API
  * @param tokenId The token mint address
  * @returns The price of the token quoted in USDC
  */
-export default async function fetchPrice(tokenId: PublicKey): Promise<string> {
+export default async function fetchPrice(_agent: SolanaAgentKit, tokenId: PublicKey): Promise<string> {
   try {
     const response = await fetch(
       `https://api.jup.ag/price/v2?ids=${tokenId.toBase58()}`,
