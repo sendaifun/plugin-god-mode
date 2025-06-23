@@ -53,7 +53,7 @@ const launchPumpfunTokenAction: Action = {
     twitter: z.string().optional().describe("Twitter handle (optional)"),
     telegram: z.string().optional().describe("Telegram group link (optional)"),
     website: z.string().url().optional().describe("Website URL (optional)"),
-    amount: z.number().min(0.0001).optional().describe("Amount of SOL to buy tokens"),
+    amount: z.number().optional().describe("Amount of SOL to buy tokens (optional)"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
