@@ -16,10 +16,22 @@ import fetchPriceAction from "./jupiter/actions/fetchPriceAction";
 import buyAction from "./jupiter/actions/buyAction";
 import sellAction from "./jupiter/actions/sellAction";
 import getTokenDataByTickerAction from "./jupiter/actions/getTokenDataByTickerAction";
+import createDCAAction from "./jupiter/actions/createDcaAction";
+import cancelDCAAction from "./jupiter/actions/cancelDCAAction";
+import getDCAOrdersAction from "./jupiter/actions/getDCAOrdersAction";
+import createLOAction from "./jupiter/actions/createLOAction";
+import cancelLOAction from "./jupiter/actions/cancelLOAction";
+import getLOsAction from "./jupiter/actions/getLOsAction";
 import fetchPrice from "./jupiter/tools/fetchPrice";
 import buy from "./jupiter/tools/buy";
 import sell from "./jupiter/tools/sell";
 import getTokenDataByTicker from "./jupiter/tools/getTokenDataByTicker";
+import createDCA from "./jupiter/tools/dca/createDCA";
+import cancelDCA from "./jupiter/tools/dca/cancelDCA";
+import getDCAOrders from "./jupiter/tools/dca/getDCAOrders";
+import createLO from "./jupiter/tools/lo/createLO";
+import cancelLO from "./jupiter/tools/lo/cancelLO";
+import getLOs from "./jupiter/tools/lo/getLOs";
 
 // lulo
 import luloWithdrawAction from "./lulo/actions/luloWithdrawAction";
@@ -108,6 +120,12 @@ const GodModePlugin = {
     claimCreatorFee,
     getPendingCreatorFee,
     onramp,
+    createDCA,
+    cancelDCA,
+    getDCAOrders,
+    createLO,
+    cancelLO,
+    getLOs,
   },
 
   // Combine all actions
@@ -137,6 +155,12 @@ const GodModePlugin = {
     claimCreatorFeeAction,
     getPendingCreatorFeeAction,
     onrampAction,
+    createDCAAction,
+    cancelDCAAction,
+    getDCAOrdersAction,
+    createLOAction,
+    cancelLOAction,
+    getLOsAction,
   ],
 
   // Initialize function
