@@ -48,12 +48,13 @@ export default async function createLO(
 
     const expiredAt = expiryAt === "10m" ? 600 : expiryAt === "1h" ? 3600 : expiryAt === "1d" ? 86400 : expiryAt === "3d" ? 259200 : expiryAt === "7d" ? 604800 : 2592000;
 
+
     const inputMintInfo = await getMintInfo(agent, inputMint);
     const outputMintInfo = await getMintInfo(agent, outputMint);
     const inputDecimals = inputMintInfo.decimals;
     const outputDecimals = outputMintInfo.decimals;
-    const makingAmountDecimals = makingAmount * Math.pow(10, inputDecimals);
-    const takingAmountDecimals = takingAmount * Math.pow(10, outputDecimals);
+    const makingAmountDecimals = (makingAmount * Math.pow(10, inputDecimals)).toFixed(0);
+    const takingAmountDecimals = (takingAmount * Math.pow(10, outputDecimals)).toFixed(0);
 
     // Step 1: Create the limit order and get transaction to sign
     const createOrderResponse: JupiterLOCreateOrderResponse = await (
@@ -69,9 +70,9 @@ export default async function createLO(
           maker: agent.wallet.publicKey.toString(),
           payer: agent.wallet.publicKey.toString(),
           params: {
-            makingAmount: makingAmountDecimals,
-            takingAmount: takingAmountDecimals,  
-            ...(expiredAt && { expiredAt: expiredAt.toString() }),
+            makingAmount: makingAmountDecimals.toString(),
+            takingAmount: takingAmountDecimals.toString(),  
+            ...(expiredAt && { expiredAt: Date.now() + expiredAt * 1000 }),
           },
           computeUnitPrice: "auto",
           wrapAndUnwrapSol: true,
