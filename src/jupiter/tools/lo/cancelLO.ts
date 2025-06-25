@@ -30,10 +30,11 @@ export default async function cancelLO(
   try {
     // Step 1: Cancel the limit order and get transaction to sign
     const cancelOrderResponse: JupiterLOCancelOrderResponse = await (
-      await fetch('https://lite-api.jup.ag/trigger/v1/cancelOrder', {
+      await fetch('https://api.jup.ag/trigger/v1/cancelOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
         },
         body: JSON.stringify({
           maker: agent.wallet.publicKey.toString(),
@@ -64,11 +65,12 @@ export default async function cancelLO(
 
     // Step 3: Execute the signed transaction
     const executeResponse: JupiterLOCancelExecuteResponse = await (
-      await fetch('https://lite-api.jup.ag/trigger/v1/execute', {
+      await fetch('https://api.jup.ag/trigger/v1/execute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
+          'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+          },
         body: JSON.stringify({
           signedTransaction: signedTx,
           requestId: requestId,

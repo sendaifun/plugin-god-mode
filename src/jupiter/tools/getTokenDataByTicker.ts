@@ -12,6 +12,12 @@ export default async function fetchPrice(
   try {
     const response = await fetch(
       "https://api.jup.ag/tokens/v1/tagged/verified",
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': _agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+        },
+      }
     );
 
     if (!response.ok) {

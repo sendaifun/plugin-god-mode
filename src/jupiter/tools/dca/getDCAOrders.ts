@@ -68,7 +68,13 @@ export default async function getDCAOrders(
   try {
     const openOrdersResponse: JupiterDCAOrdersResponse = await (
       await fetch(
-        `https://lite-api.jup.ag/recurring/v1/getRecurringOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active&recurringType=time&includeFailedTx=false`
+        `https://api.jup.ag/recurring/v1/getRecurringOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active&recurringType=time&includeFailedTx=false`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+          },
+        }
       )
     ).json();
 

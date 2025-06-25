@@ -10,6 +10,12 @@ export default async function fetchPrice(_agent: SolanaAgentKit, tokenId: Public
   try {
     const response = await fetch(
       `https://api.jup.ag/price/v2?ids=${tokenId.toBase58()}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': _agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+        },
+      }
     );
 
     if (!response.ok) {

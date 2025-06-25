@@ -61,7 +61,13 @@ export default async function getLOs(
   try {
     const openOrdersResponse: JupiterLOOrdersResponse = await (
       await fetch(
-        `https://lite-api.jup.ag/trigger/v1/getTriggerOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active`
+        `https://api.jup.ag/trigger/v1/getTriggerOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+          },
+        }
       )
     ).json();
 
