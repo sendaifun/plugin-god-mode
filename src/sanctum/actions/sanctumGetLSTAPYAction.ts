@@ -33,7 +33,7 @@ const  sanctumGetLSTAPYAction: Action = {
   }),
   handler: async (_agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
-      const apys = await sanctumGetLSTAPY(input.inputs);
+      const apys = await sanctumGetLSTAPY(_agent, input.inputs);
 
       return {
         status: "success",

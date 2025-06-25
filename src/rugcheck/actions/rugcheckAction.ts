@@ -31,7 +31,7 @@ const rugcheckAction: Action = {
   }),
   handler: async (_agent, input) => {
     try {
-      const res = await fetchTokenReportSummary(input.mint);
+      const res = await fetchTokenReportSummary(_agent, input.mint);
       return {
         status: "success",
         response: res,

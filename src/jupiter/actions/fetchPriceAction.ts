@@ -37,7 +37,7 @@ const fetchPriceAction: Action = {
   handler: async (_agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
       const tokenId = new PublicKey(input.tokenAddress);
-      const price = await fetchPrice(tokenId);
+      const price = await fetchPrice(_agent, tokenId);
 
       return {
         status: "success",

@@ -39,7 +39,7 @@ const tokenDataByTickerAction: Action = {
       const ticker = input.ticker as string;
 
       // Use agent’s method to get token data by ticker
-      const tokenData = await getTokenDataByTicker(ticker);
+      const tokenData = await getTokenDataByTicker(_agent, ticker);
 
       return {
         status: "success",

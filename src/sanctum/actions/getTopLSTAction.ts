@@ -45,7 +45,7 @@ const getTopLSTAction: Action = {
   schema: z.object({}),
   handler: async (_agent: SolanaAgentKit, _input: Record<string, any>) => {
     try {
-      const tokens: JupiterTokenData[] = await getTopLSTTokens();
+      const tokens: JupiterTokenData[] = await getTopLSTTokens(_agent);
       return {
         status: "success",
         tokens,

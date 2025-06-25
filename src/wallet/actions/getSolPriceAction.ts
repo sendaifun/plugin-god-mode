@@ -32,7 +32,7 @@ const getSolPriceAction: Action = {
   schema: z.object({
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
-    const price = await getSolPrice();
+    const price = await getSolPrice(agent);
 
     if (price === undefined) {
       return {
