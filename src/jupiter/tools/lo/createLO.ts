@@ -1,5 +1,6 @@
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
+import getMintInfo from "../../../helpers/token/getMint";
 
 export interface LOParams {
   makingAmount: string; // Amount of input token to sell (in raw token units)
@@ -10,16 +11,21 @@ export interface LOParams {
 }
 
 export interface JupiterLOCreateOrderResponse {
-  status: string;
-  requestId?: string;
+  // Success response fields
+  order?: string;
   transaction?: string;
+  requestId?: string;
+  // Error response fields
   error?: string;
+  cause?: string;
+  code?: number;
 }
 
 export interface JupiterLOExecuteResponse {
   status: string;
   signature?: string;
   error?: string;
+  code?: number;
 }
 
 /**
@@ -34,15 +40,28 @@ export default async function createLO(
   agent: SolanaAgentKit,
   inputMint: PublicKey,
   outputMint: PublicKey,
-  params: LOParams,
+  makingAmount: number,
+  takingAmount: number,
+  expiryAt?: "10m" | "1h" | "1d" | "3d" | "7d" | "30d",
 ): Promise<string> {
   try {
+
+    const expiredAt = expiryAt === "10m" ? 600 : expiryAt === "1h" ? 3600 : expiryAt === "1d" ? 86400 : expiryAt === "3d" ? 259200 : expiryAt === "7d" ? 604800 : 2592000;
+
+    const inputMintInfo = await getMintInfo(agent, inputMint);
+    const outputMintInfo = await getMintInfo(agent, outputMint);
+    const inputDecimals = inputMintInfo.decimals;
+    const outputDecimals = outputMintInfo.decimals;
+    const makingAmountDecimals = makingAmount * Math.pow(10, inputDecimals);
+    const takingAmountDecimals = takingAmount * Math.pow(10, outputDecimals);
+
     // Step 1: Create the limit order and get transaction to sign
     const createOrderResponse: JupiterLOCreateOrderResponse = await (
       await fetch('https://api.jup.ag/trigger/v1/createOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
         },
         body: JSON.stringify({
           inputMint: inputMint.toString(),
@@ -50,11 +69,9 @@ export default async function createLO(
           maker: agent.wallet.publicKey.toString(),
           payer: agent.wallet.publicKey.toString(),
           params: {
-            makingAmount: params.makingAmount,
-            takingAmount: params.takingAmount,
-            ...(params.slippageBps && { slippageBps: params.slippageBps.toString() }),
-            ...(params.expiredAt && { expiredAt: params.expiredAt.toString() }),
-            ...(params.feeBps && { feeBps: params.feeBps.toString() }),
+            makingAmount: makingAmountDecimals,
+            takingAmount: takingAmountDecimals,  
+            ...(expiredAt && { expiredAt: expiredAt.toString() }),
           },
           computeUnitPrice: "auto",
           wrapAndUnwrapSol: true,
@@ -62,8 +79,14 @@ export default async function createLO(
       })
     ).json();
 
-    if (createOrderResponse.status !== "Success" || !createOrderResponse.requestId || !createOrderResponse.transaction) {
-      throw new Error(`Limit order creation failed: ${createOrderResponse.error || 'Unknown error'}`);
+    // Check for error response
+    if (createOrderResponse.error) {
+      throw new Error(`Limit order creation failed: ${createOrderResponse.error}${createOrderResponse.cause ? ` - ${createOrderResponse.cause}` : ''}`);
+    }
+
+    // Check for successful response
+    if (!createOrderResponse.requestId || !createOrderResponse.transaction) {
+      throw new Error('Limit order creation failed: Missing requestId or transaction in response');
     }
 
     const requestId = createOrderResponse.requestId;
@@ -77,10 +100,11 @@ export default async function createLO(
 
     // Step 3: Execute the signed transaction
     const executeResponse: JupiterLOExecuteResponse = await (
-      await fetch('https://lite-api.jup.ag/trigger/v1/execute', {
+      await fetch('https://api.jup.ag/trigger/v1/execute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
         },
         body: JSON.stringify({
           signedTransaction: signedTx,
@@ -92,7 +116,8 @@ export default async function createLO(
     if (executeResponse.status === "Success" && executeResponse.signature) {
       return executeResponse.signature;
     } else {
-      throw new Error(`Limit order execution failed: ${executeResponse.error || 'Unknown error'}`);
+      const errorMessage = executeResponse.error || `Execution failed with status: ${executeResponse.status}`;
+      throw new Error(`Limit order execution failed: ${errorMessage}`);
     }
   } catch (error) {
     throw new Error(`Failed to create limit order: ${error instanceof Error ? error.message : 'Unknown error'}`);

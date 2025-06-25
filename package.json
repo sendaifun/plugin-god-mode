@@ -1,6 +1,6 @@
 {
   "name": "@solana-agent-kit/plugin-god-mode",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -53,8 +53,10 @@
     "@solana/spl-token": "^0.4.13",
     "@tensor-oss/tensorswap-sdk": "^4.5.0",
     "bn.js": "^5.2.2",
+    "lru-cache": "^11.1.0",
     "pinata": "^2.4.2",
     "redaxios": "^0.5.1",
+    "redis": "^5.5.6",
     "zod": "^3.24.4"
   },
   "packageManager": "pnpm@9.15.3"

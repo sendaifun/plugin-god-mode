@@ -1,11 +1,17 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
 
-export interface JupiterDCACancelOrderResponse {
+// Success response format
+export interface JupiterDCACancelOrderSuccessResponse {
+  requestId: string;
+  transaction: string;
+}
+
+// Error response format
+export interface JupiterDCACancelOrderErrorResponse {
+  code: number;
+  error: string;
   status: string;
-  requestId?: string;
-  transaction?: string;
-  error?: string;
 }
 
 export interface JupiterDCACancelExecuteResponse {
@@ -26,11 +32,12 @@ export default async function cancelDCA(
 ): Promise<string> {
   try {
     // Step 1: Cancel the DCA order and get transaction to sign
-    const cancelOrderResponse: JupiterDCACancelOrderResponse = await (
-      await fetch('https://lite-api.jup.ag/recurring/v1/cancelOrder', {
+    const cancelOrderResponse: JupiterDCACancelOrderSuccessResponse | JupiterDCACancelOrderErrorResponse = await (
+      await fetch('https://api.jup.ag/recurring/v1/cancelOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
         },
         body: JSON.stringify({
           order: orderId,
@@ -40,8 +47,14 @@ export default async function cancelDCA(
       })
     ).json();
 
-    if (cancelOrderResponse.status !== "Success" || !cancelOrderResponse.requestId || !cancelOrderResponse.transaction) {
-      throw new Error(`DCA order cancellation failed: ${cancelOrderResponse.error || 'Unknown error'}`);
+    // Check if the response is an error response
+    if ('code' in cancelOrderResponse && 'error' in cancelOrderResponse) {
+      throw new Error(`DCA order cancellation failed: ${cancelOrderResponse.error}`);
+    }
+
+    // Check if the response is a success response with required fields
+    if (!('requestId' in cancelOrderResponse) || !('transaction' in cancelOrderResponse)) {
+      throw new Error('DCA order cancellation failed: Invalid response format');
     }
 
     const requestId = cancelOrderResponse.requestId;
@@ -55,10 +68,11 @@ export default async function cancelDCA(
 
     // Step 3: Execute the signed transaction
     const executeResponse: JupiterDCACancelExecuteResponse = await (
-      await fetch('https://lite-api.jup.ag/recurring/v1/execute', {
+      await fetch('https://api.jup.ag/recurring/v1/execute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
         },
         body: JSON.stringify({
           signedTransaction: signedTx,

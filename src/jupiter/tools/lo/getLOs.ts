@@ -1,25 +1,53 @@
 import { type SolanaAgentKit } from "solana-agent-kit";
 
+export interface Trade {
+  orderKey: string;
+  keeper: string;
+  inputMint: string;
+  outputMint: string;
+  inputAmount: string;
+  outputAmount: string;
+  rawInputAmount: string;
+  rawOutputAmount: string;
+  feeMint: string;
+  feeAmount: string;
+  rawFeeAmount: string;
+  txId: string;
+  confirmedAt: string;
+  action: string;
+  productMeta: any;
+}
+
 export interface LimitOrder {
-  id: string;
-  maker: string;
+  userPubkey: string;
+  orderKey: string;
   inputMint: string;
   outputMint: string;
   makingAmount: string;
   takingAmount: string;
+  remainingMakingAmount: string;
+  remainingTakingAmount: string;
+  rawMakingAmount: string;
+  rawTakingAmount: string;
+  rawRemainingMakingAmount: string;
+  rawRemainingTakingAmount: string;
+  slippageBps: string;
+  expiredAt: number | null;
+  createdAt: string;
+  updatedAt: string;
   status: string;
-  createdAt: number;
-  expiredAt?: number | null;
-  feeBps?: number | null;
-  slippageBps?: number | null;
-  filledMakingAmount?: string;
-  filledTakingAmount?: string;
+  openTx: string;
+  closeTx: string;
+  programVersion: string;
+  trades: Trade[];
 }
 
 export interface JupiterLOOrdersResponse {
-  status: string;
-  orders?: LimitOrder[];
-  error?: string;
+  user: string;
+  orderStatus: string;
+  orders: LimitOrder[];
+  totalPages: number;
+  page: number;
 }
 
 /**
@@ -37,13 +65,11 @@ export default async function getLOs(
       )
     ).json();
 
-    if (openOrdersResponse.status === "Success" && openOrdersResponse.orders) {
+    if (openOrdersResponse.orders) {
       return openOrdersResponse.orders;
-    } else if (openOrdersResponse.status === "Success" && !openOrdersResponse.orders) {
-      // No orders found is still a success case
-      return [];
     } else {
-      throw new Error(`Failed to fetch limit orders: ${openOrdersResponse.error || 'Unknown error'}`);
+      // No orders found
+      return [];
     }
   } catch (error) {
     throw new Error(`Failed to get limit orders: ${error instanceof Error ? error.message : 'Unknown error'}`);

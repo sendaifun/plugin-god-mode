@@ -32,12 +32,18 @@ importers:
       bn.js:
         specifier: ^5.2.2
         version: 5.2.2
+      lru-cache:
+        specifier: ^11.1.0
+        version: 11.1.0
       pinata:
         specifier: ^2.4.2
         version: 2.4.2(react@19.1.0)
       redaxios:
         specifier: ^0.5.1
         version: 0.5.1
+      redis:
+        specifier: ^5.5.6
+        version: 5.5.6
       solana-agent-kit:
         specifier: ^2.0.0
         version: 2.0.6(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@19.1.0)(typescript@5.8.3)(utf-8-validate@5.0.10)
@@ -806,6 +812,34 @@ packages:
     resolution: {integrity: sha512-3oNhPFTVDGqThN+78bNORJiCs6iFrNlpAkJgME2K5Jlx08msGnate2lm0rplZRIHOcMNdzBDbLmFHzCeCMfRxA==}
     engines: {node: '>=16'}
 
+  '@redis/bloom@5.5.6':
+    resolution: {integrity: sha512-bNR3mxkwtfuCxNOzfV8B3R5zA1LiN57EH6zK4jVBIgzMzliNuReZXBFGnXvsi80/SYohajn78YdpYI+XNpqL+A==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@redis/client': ^5.5.6
+
+  '@redis/client@5.5.6':
+    resolution: {integrity: sha512-M3Svdwt6oSfyfQdqEr0L2HOJH2vK7GgCFx1NfAQvpWAT4+ljoT1L5S5cKT3dA9NJrxrOPDkdoTPWJnIrGCOcmw==}
+    engines: {node: '>= 18'}
+
+  '@redis/json@5.5.6':
+    resolution: {integrity: sha512-AIsoe3SsGQagqAmSQHaqxEinm5oCWr7zxPWL90kKaEdLJ+zw8KBznf2i9oK0WUFP5pFssSQUXqnscQKe2amfDQ==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@redis/client': ^5.5.6
+
+  '@redis/search@5.5.6':
+    resolution: {integrity: sha512-JSqasYqO0mVcHL7oxvbySRBBZYRYhFl3W7f0Da7BW8M/r0Z9wCiVrdjnN4/mKBpWZkoJT/iuisLUdPGhpKxBew==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@redis/client': ^5.5.6
+
+  '@redis/time-series@5.5.6':
+    resolution: {integrity: sha512-jkpcgq3NOI3TX7xEAJ3JgesJTxAx7k0m6lNxNsYdEM8KOl+xj7GaB/0CbLkoricZDmFSEAz7ClA1iK9XkGHf+Q==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@redis/client': ^5.5.6
+
   '@rollup/rollup-android-arm-eabi@4.41.1':
     resolution: {integrity: sha512-NELNvyEWZ6R9QMkiytB4/L4zSEaBC03KIXEghptLGLZWJ6VPrL63ooZQCOnlx36aQPGhzuOMwDerC1Eb2VmrLw==}
     cpu: [arm]
@@ -1402,6 +1436,10 @@ packages:
   cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
     engines: {node: '>=12'}
+
+  cluster-key-slot@1.1.2:
+    resolution: {integrity: sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==}
+    engines: {node: '>=0.10.0'}
 
   co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
@@ -2129,6 +2167,10 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
+  lru-cache@11.1.0:
+    resolution: {integrity: sha512-QIXZUBJUx+2zHUdQujWejBkcD9+cs94tLn0+YL8UrCh+D5sCXZ4c7LaEH48pNwRY3MLDgqUFyhlCyjJPf1WP0A==}
+    engines: {node: 20 || >=22}
+
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
@@ -2466,6 +2508,10 @@ packages:
 
   redaxios@0.5.1:
     resolution: {integrity: sha512-FSD2AmfdbkYwl7KDExYQlVvIrFz6Yd83pGfaGjBzM9F6rpq8g652Q4Yq5QD4c+nf4g2AgeElv1y+8ajUPiOYMg==}
+
+  redis@5.5.6:
+    resolution: {integrity: sha512-hbpqBfcuhWHOS9YLNcXcJ4akNr7HFX61Dq3JuFZ9S7uU7C7kvnzuH2PDIXOP62A3eevvACoG8UacuXP3N07xdg==}
+    engines: {node: '>= 18'}
 
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
@@ -3924,6 +3970,26 @@ snapshots:
       - typescript
       - utf-8-validate
 
+  '@redis/bloom@5.5.6(@redis/client@5.5.6)':
+    dependencies:
+      '@redis/client': 5.5.6
+
+  '@redis/client@5.5.6':
+    dependencies:
+      cluster-key-slot: 1.1.2
+
+  '@redis/json@5.5.6(@redis/client@5.5.6)':
+    dependencies:
+      '@redis/client': 5.5.6
+
+  '@redis/search@5.5.6(@redis/client@5.5.6)':
+    dependencies:
+      '@redis/client': 5.5.6
+
+  '@redis/time-series@5.5.6(@redis/client@5.5.6)':
+    dependencies:
+      '@redis/client': 5.5.6
+
   '@rollup/rollup-android-arm-eabi@4.41.1':
     optional: true
 
@@ -4694,6 +4760,8 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
+
+  cluster-key-slot@1.1.2: {}
 
   co@4.6.0: {}
 
@@ -5600,6 +5668,8 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
+  lru-cache@11.1.0: {}
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -5883,6 +5953,14 @@ snapshots:
   readdirp@4.1.2: {}
 
   redaxios@0.5.1: {}
+
+  redis@5.5.6:
+    dependencies:
+      '@redis/bloom': 5.5.6(@redis/client@5.5.6)
+      '@redis/client': 5.5.6
+      '@redis/json': 5.5.6(@redis/client@5.5.6)
+      '@redis/search': 5.5.6(@redis/client@5.5.6)
+      '@redis/time-series': 5.5.6(@redis/client@5.5.6)
 
   require-directory@2.1.1: {}
 

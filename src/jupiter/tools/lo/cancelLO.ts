@@ -2,16 +2,19 @@ import { VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
 
 export interface JupiterLOCancelOrderResponse {
-  status: string;
-  requestId?: string;
+  // Success response fields
   transaction?: string;
+  requestId?: string;
+  // Error response fields
   error?: string;
+  code?: number;
 }
 
 export interface JupiterLOCancelExecuteResponse {
   status: string;
   signature?: string;
   error?: string;
+  code?: number;
 }
 
 /**
@@ -40,8 +43,14 @@ export default async function cancelLO(
       })
     ).json();
 
-    if (cancelOrderResponse.status !== "Success" || !cancelOrderResponse.requestId || !cancelOrderResponse.transaction) {
-      throw new Error(`Limit order cancellation failed: ${cancelOrderResponse.error || 'Unknown error'}`);
+    // Check for error response
+    if (cancelOrderResponse.error) {
+      throw new Error(`Limit order cancellation failed: ${cancelOrderResponse.error}`);
+    }
+
+    // Check for successful response
+    if (!cancelOrderResponse.requestId || !cancelOrderResponse.transaction) {
+      throw new Error('Limit order cancellation failed: Missing requestId or transaction in response');
     }
 
     const requestId = cancelOrderResponse.requestId;
@@ -70,7 +79,8 @@ export default async function cancelLO(
     if (executeResponse.status === "Success" && executeResponse.signature) {
       return executeResponse.signature;
     } else {
-      throw new Error(`Limit order cancellation execution failed: ${executeResponse.error || 'Unknown error'}`);
+      const errorMessage = executeResponse.error || `Execution failed with status: ${executeResponse.status}`;
+      throw new Error(`Limit order cancellation execution failed: ${errorMessage}`);
     }
   } catch (error) {
     throw new Error(`Failed to cancel limit order: ${error instanceof Error ? error.message : 'Unknown error'}`);

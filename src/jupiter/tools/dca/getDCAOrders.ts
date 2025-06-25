@@ -1,26 +1,60 @@
 import { type SolanaAgentKit } from "solana-agent-kit";
 
-export interface DCAOrder {
-  id: string;
-  user: string;
+export interface DCATradeRecord {
+  orderKey: string;
+  keeper: string;
   inputMint: string;
   outputMint: string;
-  inAmount: number;
-  numberOfOrders: number;
-  interval: number;
-  minPrice?: number | null;
-  maxPrice?: number | null;
-  startAt?: number | null;
-  createdAt: number;
-  status: string;
-  ordersExecuted: number;
-  nextExecutionAt?: number | null;
+  inputAmount: string;
+  outputAmount: string;
+  rawInputAmount: string;
+  rawOutputAmount: string;
+  feeMint: string;
+  feeAmount: string;
+  rawFeeAmount: string;
+  txId: string;
+  confirmedAt: string;
+  action: string;
+  productMeta: any;
+}
+
+export interface DCAOrder {
+  userPubkey: string;
+  orderKey: string;
+  inputMint: string;
+  outputMint: string;
+  inDeposited: string;
+  inWithdrawn: string;
+  rawInDeposited: string;
+  rawInWithdrawn: string;
+  cycleFrequency: string;
+  outWithdrawn: string;
+  inAmountPerCycle: string;
+  minOutAmount: string;
+  maxOutAmount: string;
+  inUsed: string;
+  outReceived: string;
+  rawOutWithdrawn: string;
+  rawInAmountPerCycle: string;
+  rawMinOutAmount: string;
+  rawMaxOutAmount: string;
+  rawInUsed: string;
+  rawOutReceived: string;
+  openTx: string;
+  closeTx?: string;
+  userClosed: boolean;
+  createdAt: string;
+  updatedAt: string;
+  trades: DCATradeRecord[];
 }
 
 export interface JupiterDCAOrdersResponse {
-  status: string;
-  orders?: DCAOrder[];
-  error?: string;
+  user: string;
+  orderStatus: string;
+  time: DCAOrder[];
+  totalPages: number;
+  totalItems: number;
+  page: number;
 }
 
 /**
@@ -34,18 +68,12 @@ export default async function getDCAOrders(
   try {
     const openOrdersResponse: JupiterDCAOrdersResponse = await (
       await fetch(
-        `https://lite-api.jup.ag/recurring/v1/getRecurringOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active&recurringType=time`
+        `https://lite-api.jup.ag/recurring/v1/getRecurringOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active&recurringType=time&includeFailedTx=false`
       )
     ).json();
 
-    if (openOrdersResponse.status === "Success" && openOrdersResponse.orders) {
-      return openOrdersResponse.orders;
-    } else if (openOrdersResponse.status === "Success" && !openOrdersResponse.orders) {
-      // No orders found is still a success case
-      return [];
-    } else {
-      throw new Error(`Failed to fetch DCA orders: ${openOrdersResponse.error || 'Unknown error'}`);
-    }
+    // The response always includes a time array, even if empty
+    return openOrdersResponse.time || [];
   } catch (error) {
     throw new Error(`Failed to get DCA orders: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }

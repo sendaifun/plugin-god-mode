@@ -67,26 +67,24 @@ const createDcaAction: Action = {
   schema: z.object({
     inputMint: z.string().min(32, "Invalid input mint address").describe("The mint address of the token you want to spend/sell (e.g., So11111111111111111111111111111111111111112, EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v)"),
     outputMint: z.string().min(32, "Invalid output mint address").describe("The mint address of the token you want to receive/buy (e.g., So11111111111111111111111111111111111111112, EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v)"),
-    inAmount: z.number().positive("Input amount must be positive").describe("Amount of input token to spend per order (in raw token units, accounting for decimals)"),
-    numberOfOrders: z.number().int().positive("Number of orders must be a positive integer").describe("Total number of DCA orders to execute over time"),
-    interval: z.number().int().positive("Interval must be a positive integer (seconds)").describe("Time between each DCA order in seconds (e.g., 86400 for daily, 604800 for weekly)"),
-    minPrice: z.number().positive().optional().describe("Optional minimum price threshold - orders won't execute if price is below this"),
-    maxPrice: z.number().positive().optional().describe("Optional maximum price threshold - orders won't execute if price is above this"),
-    startAt: z.number().int().positive().optional().describe("Optional Unix timestamp when to start the DCA orders (null/undefined starts immediately)"),
+    inAmount: z.string().min(1, "Input amount is required").describe("Amount of input token to spend per order"),
+    numberOfOrders: z.string().min(1, "Number of orders is required").describe("Total number of DCA orders to execute over time"),
+    interval: z.string().min(1, "Interval is required").describe("Time between each DCA order in seconds (e.g., 86400 for daily, 604800 for weekly)"),
+    minPrice: z.string().optional().describe("Optional minimum price threshold - orders won't execute if price is below this"),
+    maxPrice: z.string().optional().describe("Optional maximum price threshold - orders won't execute if price is above this"),
+    startAt: z.string().optional().describe("Optional Unix timestamp when to start the DCA orders (null/undefined starts immediately)"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     const signature = await createDCA(
       agent,
       new PublicKey(input.inputMint),
       new PublicKey(input.outputMint),
-      {
-        inAmount: input.inAmount,
-        numberOfOrders: input.numberOfOrders,
-        interval: input.interval,
-        minPrice: input.minPrice || null,
-        maxPrice: input.maxPrice || null,
-        startAt: input.startAt || null,
-      }
+      Number(input.inAmount),
+      Number(input.interval),
+      input.numberOfOrders,
+      input.minPrice || null,
+      input.maxPrice || null,
+      input.startAt || null
     );
 
     return {
