@@ -46,7 +46,7 @@ export default async function createLO(
 ): Promise<string> {
   try {
 
-    const expiredAt = expiryAt === "10m" ? 600 : expiryAt === "1h" ? 3600 : expiryAt === "1d" ? 86400 : expiryAt === "3d" ? 259200 : expiryAt === "7d" ? 604800 : 2592000;
+    const expiredAt = expiryAt === "10m" ? 600 : expiryAt === "1h" ? 3600 : expiryAt === "1d" ? 86400 : expiryAt === "3d" ? 259200 : expiryAt === "7d" ? 604800 : null; // null -> never expires
 
 
     const inputMintInfo = await getMintInfo(agent, inputMint);
@@ -72,7 +72,7 @@ export default async function createLO(
           params: {
             makingAmount: makingAmountDecimals.toString(),
             takingAmount: takingAmountDecimals.toString(),  
-            ...(expiredAt && { expiredAt: Date.now() + expiredAt * 1000 }),
+            ...(expiredAt && { expiredAt: (Date.now() + expiredAt * 1000).toString() }),
           },
           computeUnitPrice: "auto",
           wrapAndUnwrapSol: true,
