@@ -89,6 +89,10 @@ import transfer from "./wallet/tools/transfer";
 import onramp from "./wallet/tools/onramp";
 import onrampAction from "./wallet/actions/onrampAction";
 
+// tracing
+import { wrapActionsWithTracing } from "./tracing/wrapActionsWithTracing";
+
+
 // Define and export the plugin
 const GodModePlugin = {
   name: "godmode",
@@ -129,7 +133,7 @@ const GodModePlugin = {
   },
 
   // Combine all actions
-  actions: [
+  actions: wrapActionsWithTracing([
     getTokenAction,
     getTrendingTokensAction,
     bridgeAction,
@@ -161,7 +165,7 @@ const GodModePlugin = {
     createLOAction,
     cancelLOAction,
     getLOsAction,
-  ],
+  ], "godmode"),
 
   // Initialize function
   initialize: function (agent: SolanaAgentKit): void {
