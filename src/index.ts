@@ -10,8 +10,7 @@ import getTrendingTokensAction from "./birdeye/actions/getTrendingTokensAction";
 import bridge from "./debridge/tools/bridge";
 import bridgeAction from "./debridge/actions/bridgeAction";
 
-
-// jupiter 
+// jupiter
 import fetchPriceAction from "./jupiter/actions/fetchPriceAction";
 import buyAction from "./jupiter/actions/buyAction";
 import sellAction from "./jupiter/actions/sellAction";
@@ -58,9 +57,8 @@ import rugcheck from "./rugcheck/tools/rugcheck";
 // sanctum
 import sanctumGetLSTAPY from "./sanctum/tools/sanctumGetLSTAPY";
 import sanctumGetLSTAPYAction from "./sanctum/actions/sanctumGetLSTAPYAction";
-import getTopLSTAction from "./sanctum/actions/getTopLSTAction";  
+import getTopLSTAction from "./sanctum/actions/getTopLSTAction";
 import getTopLST from "./sanctum/tools/getTopLST";
-
 
 // solana
 import getPortfolioAction from "./wallet/actions/getPortfolioAction";
@@ -69,7 +67,6 @@ import getPortfolio from "./wallet/tools/getPortfolio";
 import getSolBalance from "./wallet/tools/getSolBalance";
 import getSolBalanceAction from "./wallet/actions/getSolBalanceAction";
 import getSolPriceAction from "./wallet/actions/getSolPriceAction";
-
 
 import getSolPrice from "./wallet/tools/getSolPrice";
 
@@ -85,13 +82,18 @@ import transferSPL from "./wallet/tools/transferSPL";
 import transferAction from "./wallet/actions/transferAction";
 import transfer from "./wallet/tools/transfer";
 
+import getTransactionHistoryAction from "./wallet/actions/getTransactionHistoryAction";
+import getTransactionHistory from "./wallet/tools/getTransactionHistory";
+
 // onramp
 import onramp from "./wallet/tools/onramp";
 import onrampAction from "./wallet/actions/onrampAction";
 
 // tracing
 import { wrapActionsWithTracing } from "./tracing/wrapActionsWithTracing";
-
+import launchSendshot from "./pumpfun/tools/sendshot/launchSendshot";
+import claimSendshotCreatorFee from "./pumpfun/tools/sendshot/claimSendshotCreatorfee";
+import claimSendshotCreatorFeeAction from "./pumpfun/actions/claimSendshotCreateFeeAction";
 
 // Define and export the plugin
 const GodModePlugin = {
@@ -122,6 +124,7 @@ const GodModePlugin = {
     getSolPrice,
     luloGetApy,
     claimCreatorFee,
+    claimSendshotCreatorFee,
     getPendingCreatorFee,
     onramp,
     createDCA,
@@ -130,42 +133,49 @@ const GodModePlugin = {
     createLO,
     cancelLO,
     getLOs,
+    launchSendshot,
+    getTransactionHistory,
   },
 
   // Combine all actions
-  actions: wrapActionsWithTracing([
-    getTokenAction,
-    getTrendingTokensAction,
-    bridgeAction,
-    fetchPriceAction,
-    buyAction,
-    sellAction,
-    getTokenDataByTickerAction,
-    luloWithdrawAction,
-    luloLendAction,
-    luloGetBalanceAction,
-    getSolBalanceAction,
-    getTokenBalanceAction,
-    getWalletAddressAction,
-    transferSPLAction,
-    transferAction,
-    launchPumpfunTokenAction,
-    rugcheckAction,
-    sanctumGetLSTAPYAction,
-    getTopLSTAction,
-    getPortfolioAction,
-    getSolPriceAction,
-    luloGetApyAction,
-    claimCreatorFeeAction,
-    getPendingCreatorFeeAction,
-    onrampAction,
-    createDCAAction,
-    cancelDCAAction,
-    getDCAOrdersAction,
-    createLOAction,
-    cancelLOAction,
-    getLOsAction,
-  ], "godmode"),
+  actions: wrapActionsWithTracing(
+    [
+      getTokenAction,
+      getTrendingTokensAction,
+      bridgeAction,
+      fetchPriceAction,
+      buyAction,
+      sellAction,
+      getTokenDataByTickerAction,
+      luloWithdrawAction,
+      luloLendAction,
+      luloGetBalanceAction,
+      getSolBalanceAction,
+      getTokenBalanceAction,
+      getWalletAddressAction,
+      transferSPLAction,
+      transferAction,
+      launchPumpfunTokenAction,
+      rugcheckAction,
+      sanctumGetLSTAPYAction,
+      getTopLSTAction,
+      getPortfolioAction,
+      getSolPriceAction,
+      luloGetApyAction,
+      claimCreatorFeeAction,
+      claimSendshotCreatorFeeAction,
+      getPendingCreatorFeeAction,
+      onrampAction,
+      createDCAAction,
+      cancelDCAAction,
+      getDCAOrdersAction,
+      createLOAction,
+      cancelLOAction,
+      getLOsAction,
+      getTransactionHistoryAction,
+    ],
+    "godmode"
+  ),
 
   // Initialize function
   initialize: function (agent: SolanaAgentKit): void {

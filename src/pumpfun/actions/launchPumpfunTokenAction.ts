@@ -1,6 +1,7 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
 import launchPumpFunToken from "../tools/launchPumpfunToken";
+import launchSendShot from "../tools/sendshot/launchSendshot";
 
 const launchPumpfunTokenAction: Action = {
   name: "LAUNCH_PUMPFUN_TOKEN",
@@ -32,8 +33,7 @@ const launchPumpfunTokenAction: Action = {
           txHash: "2ZE7Rz...",
           message: "Successfully launched token on Pump.fun",
         },
-        explanation:
-          "Launch a new token with custom metadata",
+        explanation: "Launch a new token with custom metadata",
       },
     ],
   ],
@@ -53,18 +53,56 @@ const launchPumpfunTokenAction: Action = {
     twitter: z.string().optional().describe("Twitter handle (optional)"),
     telegram: z.string().optional().describe("Telegram group link (optional)"),
     website: z.string().url().optional().describe("Website URL (optional)"),
-    amount: z.number().optional().describe("Amount of SOL to buy tokens (optional)"),
+    amount: z
+      .number()
+      .optional()
+      .describe("Amount of SOL to buy tokens (optional)"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
-      const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount } = input;
+      const {
+        tokenName,
+        tokenTicker,
+        description,
+        imageUrl,
+        twitter,
+        telegram,
+        website,
+        amount,
+      } = input;
+      if (agent.config.OTHER_API_KEYS?.SENDSHOT_API_KEY) {
+        try {
+          const result = await launchSendShot(
+            agent,
+            tokenName,
+            tokenTicker,
+            description,
+            imageUrl,
+            amount,
+            twitter,
+            telegram,
+            website
+          );
+          return {
+            status: "success",
+            message: "Successfully launched token",
+            tokenAddress: result.mint,
+            txHash: result.txHash,
+          };
+        } catch (error: any) {
+          console.error(
+            "Error in launchSendShot: trying launching on pumpfun",
+            error
+          );
+        }
+      }
       const result = await launchPumpFunToken(
         agent,
         tokenName,
         tokenTicker,
         description,
         imageUrl,
-        amount, 
+        amount,
         twitter,
         telegram,
         website

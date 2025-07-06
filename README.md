@@ -28,6 +28,7 @@ Just like the legendary cheat code, GOD Mode gives you access to every essential
 - `getWalletAddress` — Get your wallet address (**read-only, no fees**)
 - `getSolPrice` — Get current SOL price (**read-only, no fees**)
 - `onramp` — Fiat-to-crypto onramp
+- `getTransactionHistory` — Get transaction history (**read-only, no fees**)
 
 ### Jupiter Trading
 - `buy` — Buy tokens using SOL (**0.5% fees**)
@@ -49,6 +50,7 @@ Just like the legendary cheat code, GOD Mode gives you access to every essential
 - `launchPumpFunToken` — Launch new tokens on pump.fun
 - `claimCreatorFee` — Claim creator fees from launched tokens
 - `getPendingCreatorFee` — Check pending creator fees (**read-only, no fees**)
+- `claimSendshotCreatorFee` — Claim creator fees from launched tokens
 
 ### Security & Analysis
 - `rugcheck` — Analyze token security and potential risks (**read-only, no fees**)
