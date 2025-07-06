@@ -1,6 +1,7 @@
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
 import getMintInfo from "../../../helpers/token/getMint";
+import { clearCacheValue } from "../../../helpers/cache";
 
 export interface LOParams {
   makingAmount: string; // Amount of input token to sell (in raw token units)
@@ -115,6 +116,7 @@ export default async function createLO(
     ).json();
 
     if (executeResponse.status === "Success" && executeResponse.signature) {
+      await clearCacheValue(agent, `jupiter_lo_${agent.wallet.publicKey.toBase58()}`);
       return executeResponse.signature;
     } else {
       const errorMessage = executeResponse.error || `Execution failed with status: ${executeResponse.status}`;

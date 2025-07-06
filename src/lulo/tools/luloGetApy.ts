@@ -1,4 +1,5 @@
 import { type SolanaAgentKit } from "solana-agent-kit";
+import { setCacheValue , getCacheValue} from "../../helpers/cache";
 
 /**
  * Interface for APY rates over different time periods.
@@ -39,6 +40,12 @@ export default async function luloGetApy(
       );
     }
 
+    const cacheKey = `lulo_apy_${agent.wallet.publicKey.toBase58()}`;
+    const cachedData = await getCacheValue(agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const response = await fetch(
       "https://api.lulo.fi/v1/rates.getRates",
       {
@@ -64,6 +71,9 @@ export default async function luloGetApy(
     }
 
     const data = await response.json();
+
+    // 10 minutes
+    await setCacheValue(agent, cacheKey, data, 10 * 60);
 
     return data as LuloApyRates;
     

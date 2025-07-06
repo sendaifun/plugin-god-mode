@@ -1,5 +1,6 @@
 import { SolanaAgentKit } from "solana-agent-kit";
 import type { JupiterTokenData } from "../types";
+import { setCacheValue, getCacheValue } from "../../helpers/cache";
 
 /**
  * Fetches token data by ticker
@@ -10,6 +11,15 @@ export default async function fetchPrice(
   ticker: string,
 ): Promise<JupiterTokenData> {
   try {
+    // Create a cache key based on the ticker
+    const cacheKey = `jupiter_token_data_${ticker.toLowerCase()}`;
+
+    // Check if data is cached
+    const cachedData = await getCacheValue(_agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const response = await fetch(
       "https://api.jup.ag/tokens/v1/tagged/verified",
       {
@@ -37,6 +47,9 @@ export default async function fetchPrice(
     if (!tokenData) {
       throw new Error("Token data not available for the given ticker.");
     }
+
+    // Cache the result for 10 minutes
+    await setCacheValue(_agent, cacheKey, tokenData, 10 * 60);
 
     return tokenData;
   } catch (e: any) {

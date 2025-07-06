@@ -1,4 +1,5 @@
 import type { SolanaAgentKit, TokenCheck } from "solana-agent-kit";
+import { setCacheValue , getCacheValue} from "../../helpers/cache";
 
 const BASE_URL = "https://api.rugcheck.xyz/v1";
 
@@ -14,6 +15,13 @@ export default async function fetchTokenReportSummary(
   mint: string,
 ): Promise<TokenCheck> {
   try {
+
+    const cacheKey = `rugcheck_${mint}`;
+    const cachedData = await getCacheValue(_agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const response = await fetch(`${BASE_URL}/tokens/${mint}/report/summary`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -21,6 +29,9 @@ export default async function fetchTokenReportSummary(
     const data = await response.json();
 
     data.score = data.score == 1 ? "safe" : "unsafe";
+
+    // 7 days
+    await setCacheValue(_agent, cacheKey, data, 7 * 24 * 60 * 60);
 
     return data;
   } catch (error: any) {

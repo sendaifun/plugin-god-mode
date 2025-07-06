@@ -1,4 +1,5 @@
 import { type SolanaAgentKit } from "solana-agent-kit";
+import { setCacheValue, getCacheValue } from "../../../helpers/cache";
 
 export interface Trade {
   orderKey: string;
@@ -59,6 +60,12 @@ export default async function getLOs(
   agent: SolanaAgentKit,
 ): Promise<LimitOrder[]> {
   try {
+    const cacheKey = `jupiter_lo_${agent.wallet.publicKey.toBase58()}`;
+    const cachedData = await getCacheValue(agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const openOrdersResponse: JupiterLOOrdersResponse = await (
       await fetch(
         `https://api.jup.ag/trigger/v1/getTriggerOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active`,
@@ -72,6 +79,7 @@ export default async function getLOs(
     ).json();
 
     if (openOrdersResponse.orders) {
+      await setCacheValue(agent, cacheKey, openOrdersResponse.orders, 5 * 60);
       return openOrdersResponse.orders;
     } else {
       // No orders found

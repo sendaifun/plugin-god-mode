@@ -13,6 +13,11 @@ export const cache = new TTLCache<string, any>({
 // Global Redis client instance
 let globalRedisClient: RedisClientType | null = null;
 
+/**
+ * Get the cache instance
+ * @param agent - SolanaAgentKit instance
+ * @returns The cache instance
+ */
 export const getCache = async (agent: SolanaAgentKit): Promise<RedisClientType | TTLCache<string, any>> => {
     if (globalRedisClient && globalRedisClient.isReady) {
         return globalRedisClient;
@@ -42,6 +47,12 @@ export const getCache = async (agent: SolanaAgentKit): Promise<RedisClientType |
     }
 }   
 
+/**
+ * Get a value from the cache
+ * @param agent - SolanaAgentKit instance
+ * @param key - The key to get
+ * @returns The value from the cache
+ */
 export const getCacheValue = async (agent: SolanaAgentKit, key: string): Promise<any> => {
     const cacheInstance = await getCache(agent);
     
@@ -61,6 +72,13 @@ export const getCacheValue = async (agent: SolanaAgentKit, key: string): Promise
     }
 }
 
+/**
+ * Set a value in the cache
+ * @param agent - SolanaAgentKit instance
+ * @param key - The key to set
+ * @param value - The value to set
+ * @param ttlSeconds - The TTL in seconds
+ */
 export const setCacheValue = async (
     agent: SolanaAgentKit, 
     key: string, 
@@ -79,8 +97,18 @@ export const setCacheValue = async (
     }
 }
 
+export const clearCacheValue = async (agent: SolanaAgentKit, key: string): Promise<void> => {
+    const cacheInstance = await getCache(agent);
+    if (cacheInstance instanceof TTLCache) {
+        cacheInstance.delete(key);
+    } else {
+        await cacheInstance.del(key);
+    }
+}
+
 export default {
     getCacheValue,
     setCacheValue,
+    clearCacheValue,
     DEFAULT_TTL_SECONDS,
 }

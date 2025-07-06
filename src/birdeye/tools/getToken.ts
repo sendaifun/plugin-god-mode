@@ -1,5 +1,6 @@
 import { SolanaAgentKit } from "solana-agent-kit";
 import type { BirdeyeTokenOverviewResponse } from "../types";
+import { setCacheValue, getCacheValue } from "../../helpers/cache";
 
 /**
  * Fetch token overview for a given mint address using the Birdeye public API
@@ -15,6 +16,12 @@ export default async function getToken(agent: SolanaAgentKit, address: string): 
   }
 
   try {
+    const cacheKey = `birdeye_token_${address}`;
+    const cachedData = await getCacheValue(agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -52,6 +59,8 @@ export default async function getToken(agent: SolanaAgentKit, address: string): 
         "24 hours": data.priceChange24hPercent,
       }
     };
+
+    await setCacheValue(agent, cacheKey, formattedData, 10 * 60);
 
     return formattedData;
   } catch (error: any) {

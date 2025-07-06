@@ -1,4 +1,5 @@
 import { type SolanaAgentKit } from "solana-agent-kit";
+import { setCacheValue, getCacheValue } from "../../../helpers/cache";
 
 export interface DCATradeRecord {
   orderKey: string;
@@ -66,6 +67,12 @@ export default async function getDCAOrders(
   agent: SolanaAgentKit,
 ): Promise<DCAOrder[]> {
   try {
+    const cacheKey = `jupiter_dca_${agent.wallet.publicKey.toBase58()}`;
+    const cachedData = await getCacheValue(agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const openOrdersResponse: JupiterDCAOrdersResponse = await (
       await fetch(
         `https://api.jup.ag/recurring/v1/getRecurringOrders?user=${agent.wallet.publicKey.toString()}&orderStatus=active&recurringType=time&includeFailedTx=false`,
@@ -79,6 +86,7 @@ export default async function getDCAOrders(
     ).json();
 
     // The response always includes a time array, even if empty
+    await setCacheValue(agent, cacheKey, openOrdersResponse.time, 10 * 60);
     return openOrdersResponse.time || [];
   } catch (error) {
     throw new Error(`Failed to get DCA orders: ${error instanceof Error ? error.message : 'Unknown error'}`);

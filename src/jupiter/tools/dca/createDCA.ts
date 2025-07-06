@@ -1,6 +1,7 @@
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
 import getMintInfo from "../../../helpers/token/getMint";
+import { clearCacheValue } from "../../../helpers/cache";
 
 export interface JupiterDCACreateOrderResponse {
   // Success response
@@ -115,6 +116,7 @@ export default async function createDCA(
     ).json();
 
     if (executeResponse.status === "Success" && executeResponse.signature) {
+      await clearCacheValue(agent, `jupiter_dca_${agent.wallet.publicKey.toBase58()}`);
       return executeResponse.signature;
     } else {
       throw new Error(`DCA order execution failed: ${executeResponse.error || 'Unknown error'}`);

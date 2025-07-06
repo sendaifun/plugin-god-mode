@@ -1,5 +1,6 @@
 import { SolanaAgentKit } from "solana-agent-kit";
 import type { BirdeyeTrendingTokensResponse } from "../types";
+import { setCacheValue, getCacheValue } from "../../helpers/cache";
 
 /**
  * Fetch trending tokens on Solana using the Birdeye public API
@@ -15,6 +16,12 @@ export default async function getTrendingTokens(agent: SolanaAgentKit): Promise<
   }
 
   try {
+    const cacheKey = `birdeye_trending_tokens`;
+    const cachedData = await getCacheValue(agent, cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -31,6 +38,8 @@ export default async function getTrendingTokens(agent: SolanaAgentKit): Promise<
     const data: BirdeyeTrendingTokensResponse = await response.json();
 
     const formattedData = data.data.tokens
+
+    await setCacheValue(agent, cacheKey, formattedData, 10 * 60);
 
     return formattedData;
   } catch (error: any) {

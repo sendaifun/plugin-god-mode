@@ -1,5 +1,6 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
+import { clearCacheValue } from "../../../helpers/cache";
 
 // Success response format
 export interface JupiterDCACancelOrderSuccessResponse {
@@ -82,6 +83,7 @@ export default async function cancelDCA(
     ).json();
 
     if (executeResponse.status === "Success" && executeResponse.signature) {
+      await clearCacheValue(agent, `jupiter_dca_${agent.wallet.publicKey.toBase58()}`);
       return executeResponse.signature;
     } else {
       throw new Error(`DCA order cancellation execution failed: ${executeResponse.error || 'Unknown error'}`);

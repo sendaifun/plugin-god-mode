@@ -1,5 +1,6 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit } from "solana-agent-kit";
+import { clearCacheValue } from "../../../helpers/cache";
 
 export interface JupiterLOCancelOrderResponse {
   // Success response fields
@@ -79,6 +80,7 @@ export default async function cancelLO(
     ).json();
 
     if (executeResponse.status === "Success" && executeResponse.signature) {
+      await clearCacheValue(agent, `jupiter_lo_${agent.wallet.publicKey.toBase58()}`);
       return executeResponse.signature;
     } else {
       const errorMessage = executeResponse.error || `Execution failed with status: ${executeResponse.status}`;

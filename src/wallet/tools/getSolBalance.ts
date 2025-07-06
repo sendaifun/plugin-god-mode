@@ -1,5 +1,6 @@
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { SolanaAgentKit } from "solana-agent-kit";
+import { setCacheValue , getCacheValue} from "../../helpers/cache";
 
 
 /**
@@ -10,7 +11,13 @@ import { SolanaAgentKit } from "solana-agent-kit";
 export default async function getSolBalance(
   agent: SolanaAgentKit,
 ): Promise<number> {
+  const cacheKey = `solana_balance_${agent.wallet.publicKey.toBase58()}`;
+  const cachedBalance = await getCacheValue(agent,cacheKey);
+  if (cachedBalance) {
+    return cachedBalance;
+  }
   const lamportsBalance = await agent.connection.getBalance(agent.wallet.publicKey);
+  await setCacheValue(agent, cacheKey, lamportsBalance, 5);
 
   const solBalance = lamportsBalance / LAMPORTS_PER_SOL;
 
