@@ -1,7 +1,7 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
 import launchPumpFunToken from "../tools/launchPumpfunToken";
-import launchSendShot from "../tools/sendshot/launchSendshot";
+import launchMeteoraToken from "../../meteora/tools/launchMeteoraToken";
 
 const launchPumpfunTokenAction: Action = {
   name: "LAUNCH_PUMPFUN_TOKEN",
@@ -13,8 +13,7 @@ const launchPumpfunTokenAction: Action = {
     "launch memecoin",
     "create pump token",
   ],
-  description:
-    "Launch a new token on Pump.fun with customizable metadata and initial liquidity",
+  description: "Launch a new token on Pump.fun with customizable metadata and initial liquidity",
   examples: [
     [
       {
@@ -39,40 +38,21 @@ const launchPumpfunTokenAction: Action = {
   ],
   schema: z.object({
     tokenName: z.string().min(1).max(32).describe("Name of the token"),
-    tokenTicker: z
-      .string()
-      .min(2)
-      .max(10)
-      .describe("Ticker symbol of the token"),
-    description: z
-      .string()
-      .min(1)
-      .max(1000)
-      .describe("Description of the token"),
+    tokenTicker: z.string().min(2).max(10).describe("Ticker symbol of the token"),
+    description: z.string().min(1).max(1000).describe("Description of the token"),
     imageUrl: z.string().url().describe("URL of the token image"),
     twitter: z.string().optional().describe("Twitter handle (optional)"),
     telegram: z.string().optional().describe("Telegram group link (optional)"),
     website: z.string().url().optional().describe("Website URL (optional)"),
-    amount: z
-      .number()
-      .optional()
-      .describe("Amount of SOL to buy tokens (optional)"),
+    amount: z.number().optional().describe("Amount of SOL to buy tokens (optional)"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
-      const {
-        tokenName,
-        tokenTicker,
-        description,
-        imageUrl,
-        twitter,
-        telegram,
-        website,
-        amount,
-      } = input;
+      const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount } =
+        input;
       if (agent.config.OTHER_API_KEYS?.SENDSHOT_API_KEY) {
         try {
-          const result = await launchSendShot(
+          const result = await launchMeteoraToken(
             agent,
             tokenName,
             tokenTicker,
@@ -90,10 +70,7 @@ const launchPumpfunTokenAction: Action = {
             txHash: result.txHash,
           };
         } catch (error: any) {
-          console.error(
-            "Error in launchSendShot: trying launching on pumpfun",
-            error
-          );
+          console.error("Error in launchSendShot: trying launching on pumpfun", error);
         }
       }
       const result = await launchPumpFunToken(

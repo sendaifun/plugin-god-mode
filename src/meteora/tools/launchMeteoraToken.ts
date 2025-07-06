@@ -7,7 +7,7 @@ interface SendShotResponse {
   error?: string;
 }
 
-export default async function launchSendshot(
+export default async function launchMeteoraToken(
   agent: SolanaAgentKit,
   name: string,
   symbol: string,
@@ -49,8 +49,7 @@ export default async function launchSendshot(
       console.error("Sendshot API error response:", responseData);
 
       throw new Error(
-        responseData.error ||
-          `Sendshot API request failed with status ${response.status}`
+        responseData.error || `Sendshot API request failed with status ${response.status}`
       );
     }
 
@@ -59,9 +58,7 @@ export default async function launchSendshot(
       throw new Error("No transaction data received from API");
     }
 
-    const tx = VersionedTransaction.deserialize(
-      Buffer.from(serializedTx, "base64")
-    );
+    const tx = VersionedTransaction.deserialize(Buffer.from(serializedTx, "base64"));
     tx.message.recentBlockhash = (
       await agent.connection.getLatestBlockhash({
         commitment: "confirmed",
@@ -80,9 +77,7 @@ export default async function launchSendshot(
       }
     } catch (signError: any) {
       console.error("Error signing transaction:", signError);
-      throw new Error(
-        signError.message || "Failed to sign transaction. Please try again."
-      );
+      throw new Error(signError.message || "Failed to sign transaction. Please try again.");
     }
 
     const signTxResponse = await fetch(
@@ -107,8 +102,6 @@ export default async function launchSendshot(
     };
   } catch (error) {
     console.error("Error calling Sendshot API:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Sendshot API request failed"
-    );
+    throw new Error(error instanceof Error ? error.message : "Sendshot API request failed");
   }
 }

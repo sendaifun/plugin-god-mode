@@ -1,6 +1,6 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
-import claimSendshotCreatorFee from "../tools/sendshot/claimSendshotCreatorfee";
+import claimMeteoraCreatorFee from "../tools/claimMeteoraCreatorFee";
 
 const claimCreatorFeeAction: Action = {
   name: "CLAIM_SENDSHOT_CREATOR_FEE",
@@ -24,12 +24,12 @@ const claimCreatorFeeAction: Action = {
     ],
   ],
   schema: z.object({
-    mint: z.string(),
+    mint: z.string().min(1).max(44).describe("The mint address of the token"),
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
       // The input object is not used here as claimCreatorFee only needs the agent
-      const result = await claimSendshotCreatorFee(agent, input.mint);
+      const result = await claimMeteoraCreatorFee(agent, input.mint);
 
       return {
         status: "success",

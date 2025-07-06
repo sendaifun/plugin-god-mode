@@ -91,9 +91,11 @@ import onrampAction from "./wallet/actions/onrampAction";
 
 // tracing
 import { wrapActionsWithTracing } from "./tracing/wrapActionsWithTracing";
-import launchSendshot from "./pumpfun/tools/sendshot/launchSendshot";
-import claimSendshotCreatorFee from "./pumpfun/tools/sendshot/claimSendshotCreatorfee";
-import claimSendshotCreatorFeeAction from "./pumpfun/actions/claimSendshotCreateFeeAction";
+
+// meteora
+import launchMeteoraToken from "./meteora/tools/launchMeteoraToken";
+import claimMeteoraCreatorFee from "./meteora/tools/claimMeteoraCreatorFee";
+import claimMeteoraCreatorFeeAction from "./meteora/action/claimMeteoraCreateFeeAction";
 
 // Define and export the plugin
 const GodModePlugin = {
@@ -124,7 +126,7 @@ const GodModePlugin = {
     getSolPrice,
     luloGetApy,
     claimCreatorFee,
-    claimSendshotCreatorFee,
+    claimMeteoraCreatorFee,
     getPendingCreatorFee,
     onramp,
     createDCA,
@@ -133,7 +135,7 @@ const GodModePlugin = {
     createLO,
     cancelLO,
     getLOs,
-    launchSendshot,
+    launchMeteoraToken,
     getTransactionHistory,
   },
 
@@ -163,7 +165,7 @@ const GodModePlugin = {
       getSolPriceAction,
       luloGetApyAction,
       claimCreatorFeeAction,
-      claimSendshotCreatorFeeAction,
+      claimMeteoraCreatorFeeAction,
       getPendingCreatorFeeAction,
       onrampAction,
       createDCAAction,

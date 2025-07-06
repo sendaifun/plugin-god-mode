@@ -1,7 +1,7 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { SolanaAgentKit } from "solana-agent-kit";
 
-interface ClaimSendshotCreatorfeeResponse {
+interface ClaimMeteoraCreatorfeeResponse {
   tx: string;
   error?: string;
 }
@@ -11,7 +11,7 @@ interface ClaimSendshotCreatorfeeResponse {
  * @param agent - SolanaAgentKit instance
  * @returns - Signature of the transaction, mint address and metadata URI, if successful, else error
  */
-export default async function claimSendshotCreatorFee(
+export default async function claimMeteoraCreatorFee(
   agent: SolanaAgentKit,
   mintAddress: string
 ) {
@@ -30,7 +30,7 @@ export default async function claimSendshotCreatorFee(
         }),
       }
     );
-    const responseData: ClaimSendshotCreatorfeeResponse = await response.json();
+    const responseData: ClaimMeteoraCreatorfeeResponse = await response.json();
 
     if (!response.ok) {
       throw new Error(responseData.error);
