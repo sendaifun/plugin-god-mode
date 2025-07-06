@@ -42,13 +42,13 @@ import luloGetApy from "./lulo/tools/luloGetApy";
 import luloGetBalanceAction from "./lulo/actions/luloGetBalanceAction";
 import getLuloBalance from "./lulo/tools/getLuloBalance";
 
-// pumpfun
-import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
-import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
-import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
-import claimCreatorFee from "./pumpfun/tools/claimCreatorFee";
-import getPendingCreatorFeeAction from "./pumpfun/actions/getPendingCreatorFeeAction";
-import getPendingCreatorFee from "./pumpfun/tools/getPendingCreatorFee";
+// pumpfun 
+// import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
+// import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
+// import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
+// import claimCreatorFee from "./pumpfun/tools/claimCreatorFee";
+// import getPendingCreatorFeeAction from "./pumpfun/actions/getPendingCreatorFeeAction";
+// import getPendingCreatorFee from "./pumpfun/tools/getPendingCreatorFee";
 
 // rugcheck
 import rugcheckAction from "./rugcheck/actions/rugcheckAction";
@@ -94,6 +94,7 @@ import { wrapActionsWithTracing } from "./tracing/wrapActionsWithTracing";
 
 // meteora
 import launchMeteoraToken from "./meteora/tools/launchMeteoraToken";
+import launchMeteoraTokenAction from "./meteora/action/launchMeteoraTokenAction";
 import claimMeteoraCreatorFee from "./meteora/tools/claimMeteoraCreatorFee";
 import claimMeteoraCreatorFeeAction from "./meteora/action/claimMeteoraCreateFeeAction";
 
@@ -118,16 +119,13 @@ const GodModePlugin = {
     getTokenBalance,
     transferSPL,
     transfer,
-    launchPumpFunToken,
     rugcheck,
     sanctumGetLSTAPY,
     getTopLST,
     getPortfolio,
     getSolPrice,
     luloGetApy,
-    claimCreatorFee,
     claimMeteoraCreatorFee,
-    getPendingCreatorFee,
     onramp,
     createDCA,
     cancelDCA,
@@ -157,16 +155,13 @@ const GodModePlugin = {
       getWalletAddressAction,
       transferSPLAction,
       transferAction,
-      launchPumpfunTokenAction,
       rugcheckAction,
       sanctumGetLSTAPYAction,
       getTopLSTAction,
       getPortfolioAction,
       getSolPriceAction,
       luloGetApyAction,
-      claimCreatorFeeAction,
       claimMeteoraCreatorFeeAction,
-      getPendingCreatorFeeAction,
       onrampAction,
       createDCAAction,
       cancelDCAAction,
@@ -175,6 +170,7 @@ const GodModePlugin = {
       cancelLOAction,
       getLOsAction,
       getTransactionHistoryAction,
+      launchMeteoraTokenAction,
     ],
     "godmode"
   ),

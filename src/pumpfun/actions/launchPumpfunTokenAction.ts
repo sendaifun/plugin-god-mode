@@ -1,7 +1,6 @@
 import { Action, SolanaAgentKit } from "solana-agent-kit";
 import { z } from "zod";
 import launchPumpFunToken from "../tools/launchPumpfunToken";
-import launchMeteoraToken from "../../meteora/tools/launchMeteoraToken";
 
 const launchPumpfunTokenAction: Action = {
   name: "LAUNCH_PUMPFUN_TOKEN",
@@ -13,7 +12,8 @@ const launchPumpfunTokenAction: Action = {
     "launch memecoin",
     "create pump token",
   ],
-  description: "Launch a new token on Pump.fun with customizable metadata and initial liquidity",
+  description:
+    "Launch a new token on Pump.fun with customizable metadata and initial liquidity",
   examples: [
     [
       {
@@ -32,14 +32,23 @@ const launchPumpfunTokenAction: Action = {
           txHash: "2ZE7Rz...",
           message: "Successfully launched token on Pump.fun",
         },
-        explanation: "Launch a new token with custom metadata",
+        explanation:
+          "Launch a new token with custom metadata",
       },
     ],
   ],
   schema: z.object({
     tokenName: z.string().min(1).max(32).describe("Name of the token"),
-    tokenTicker: z.string().min(2).max(10).describe("Ticker symbol of the token"),
-    description: z.string().min(1).max(1000).describe("Description of the token"),
+    tokenTicker: z
+      .string()
+      .min(2)
+      .max(10)
+      .describe("Ticker symbol of the token"),
+    description: z
+      .string()
+      .min(1)
+      .max(1000)
+      .describe("Description of the token"),
     imageUrl: z.string().url().describe("URL of the token image"),
     twitter: z.string().optional().describe("Twitter handle (optional)"),
     telegram: z.string().optional().describe("Telegram group link (optional)"),
@@ -48,38 +57,14 @@ const launchPumpfunTokenAction: Action = {
   }),
   handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
     try {
-      const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount } =
-        input;
-      if (agent.config.OTHER_API_KEYS?.SENDSHOT_API_KEY) {
-        try {
-          const result = await launchMeteoraToken(
-            agent,
-            tokenName,
-            tokenTicker,
-            description,
-            imageUrl,
-            amount,
-            twitter,
-            telegram,
-            website
-          );
-          return {
-            status: "success",
-            message: "Successfully launched token",
-            tokenAddress: result.mint,
-            txHash: result.txHash,
-          };
-        } catch (error: any) {
-          console.error("Error in launchSendShot: trying launching on pumpfun", error);
-        }
-      }
+      const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount } = input;
       const result = await launchPumpFunToken(
         agent,
         tokenName,
         tokenTicker,
         description,
         imageUrl,
-        amount,
+        amount, 
         twitter,
         telegram,
         website
