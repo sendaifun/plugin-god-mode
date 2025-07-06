@@ -10,8 +10,7 @@ import getTrendingTokensAction from "./birdeye/actions/getTrendingTokensAction";
 import bridge from "./debridge/tools/bridge";
 import bridgeAction from "./debridge/actions/bridgeAction";
 
-
-// jupiter 
+// jupiter
 import fetchPriceAction from "./jupiter/actions/fetchPriceAction";
 import buyAction from "./jupiter/actions/buyAction";
 import sellAction from "./jupiter/actions/sellAction";
@@ -43,13 +42,13 @@ import luloGetApy from "./lulo/tools/luloGetApy";
 import luloGetBalanceAction from "./lulo/actions/luloGetBalanceAction";
 import getLuloBalance from "./lulo/tools/getLuloBalance";
 
-// pumpfun
-import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
-import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
-import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
-import claimCreatorFee from "./pumpfun/tools/claimCreatorFee";
-import getPendingCreatorFeeAction from "./pumpfun/actions/getPendingCreatorFeeAction";
-import getPendingCreatorFee from "./pumpfun/tools/getPendingCreatorFee";
+// pumpfun 
+// import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
+// import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
+// import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
+// import claimCreatorFee from "./pumpfun/tools/claimCreatorFee";
+// import getPendingCreatorFeeAction from "./pumpfun/actions/getPendingCreatorFeeAction";
+// import getPendingCreatorFee from "./pumpfun/tools/getPendingCreatorFee";
 
 // rugcheck
 import rugcheckAction from "./rugcheck/actions/rugcheckAction";
@@ -58,9 +57,8 @@ import rugcheck from "./rugcheck/tools/rugcheck";
 // sanctum
 import sanctumGetLSTAPY from "./sanctum/tools/sanctumGetLSTAPY";
 import sanctumGetLSTAPYAction from "./sanctum/actions/sanctumGetLSTAPYAction";
-import getTopLSTAction from "./sanctum/actions/getTopLSTAction";  
+import getTopLSTAction from "./sanctum/actions/getTopLSTAction";
 import getTopLST from "./sanctum/tools/getTopLST";
-
 
 // solana
 import getPortfolioAction from "./wallet/actions/getPortfolioAction";
@@ -69,7 +67,6 @@ import getPortfolio from "./wallet/tools/getPortfolio";
 import getSolBalance from "./wallet/tools/getSolBalance";
 import getSolBalanceAction from "./wallet/actions/getSolBalanceAction";
 import getSolPriceAction from "./wallet/actions/getSolPriceAction";
-
 
 import getSolPrice from "./wallet/tools/getSolPrice";
 
@@ -85,6 +82,9 @@ import transferSPL from "./wallet/tools/transferSPL";
 import transferAction from "./wallet/actions/transferAction";
 import transfer from "./wallet/tools/transfer";
 
+import getTransactionHistoryAction from "./wallet/actions/getTransactionHistoryAction";
+import getTransactionHistory from "./wallet/tools/getTransactionHistory";
+
 // onramp
 import onramp from "./wallet/tools/onramp";
 import onrampAction from "./wallet/actions/onrampAction";
@@ -92,6 +92,11 @@ import onrampAction from "./wallet/actions/onrampAction";
 // tracing
 import { wrapActionsWithTracing } from "./tracing/wrapActionsWithTracing";
 
+// meteora
+import launchMeteoraToken from "./meteora/tools/launchMeteoraToken";
+import launchMeteoraTokenAction from "./meteora/action/launchMeteoraTokenAction";
+import claimMeteoraCreatorFee from "./meteora/tools/claimMeteoraCreatorFee";
+import claimMeteoraCreatorFeeAction from "./meteora/action/claimMeteoraCreateFeeAction";
 
 // Define and export the plugin
 const GodModePlugin = {
@@ -114,15 +119,13 @@ const GodModePlugin = {
     getTokenBalance,
     transferSPL,
     transfer,
-    launchPumpFunToken,
     rugcheck,
     sanctumGetLSTAPY,
     getTopLST,
     getPortfolio,
     getSolPrice,
     luloGetApy,
-    claimCreatorFee,
-    getPendingCreatorFee,
+    claimMeteoraCreatorFee,
     onramp,
     createDCA,
     cancelDCA,
@@ -130,42 +133,47 @@ const GodModePlugin = {
     createLO,
     cancelLO,
     getLOs,
+    launchMeteoraToken,
+    getTransactionHistory,
   },
 
   // Combine all actions
-  actions: wrapActionsWithTracing([
-    getTokenAction,
-    getTrendingTokensAction,
-    bridgeAction,
-    fetchPriceAction,
-    buyAction,
-    sellAction,
-    getTokenDataByTickerAction,
-    luloWithdrawAction,
-    luloLendAction,
-    luloGetBalanceAction,
-    getSolBalanceAction,
-    getTokenBalanceAction,
-    getWalletAddressAction,
-    transferSPLAction,
-    transferAction,
-    launchPumpfunTokenAction,
-    rugcheckAction,
-    sanctumGetLSTAPYAction,
-    getTopLSTAction,
-    getPortfolioAction,
-    getSolPriceAction,
-    luloGetApyAction,
-    claimCreatorFeeAction,
-    getPendingCreatorFeeAction,
-    onrampAction,
-    createDCAAction,
-    cancelDCAAction,
-    getDCAOrdersAction,
-    createLOAction,
-    cancelLOAction,
-    getLOsAction,
-  ], "godmode"),
+  actions: wrapActionsWithTracing(
+    [
+      getTokenAction,
+      getTrendingTokensAction,
+      bridgeAction,
+      fetchPriceAction,
+      buyAction,
+      sellAction,
+      getTokenDataByTickerAction,
+      luloWithdrawAction,
+      luloLendAction,
+      luloGetBalanceAction,
+      getSolBalanceAction,
+      getTokenBalanceAction,
+      getWalletAddressAction,
+      transferSPLAction,
+      transferAction,
+      rugcheckAction,
+      sanctumGetLSTAPYAction,
+      getTopLSTAction,
+      getPortfolioAction,
+      getSolPriceAction,
+      luloGetApyAction,
+      claimMeteoraCreatorFeeAction,
+      onrampAction,
+      createDCAAction,
+      cancelDCAAction,
+      getDCAOrdersAction,
+      createLOAction,
+      cancelLOAction,
+      getLOsAction,
+      getTransactionHistoryAction,
+      launchMeteoraTokenAction,
+    ],
+    "godmode"
+  ),
 
   // Initialize function
   initialize: function (agent: SolanaAgentKit): void {
