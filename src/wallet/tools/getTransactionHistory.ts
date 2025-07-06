@@ -1,4 +1,5 @@
 import { SolanaAgentKit } from "solana-agent-kit";
+import getToken from "../../birdeye/tools/getToken";
 
 const HELIUS_BASE_URL = "https://api.helius.xyz/v0";
 
@@ -127,7 +128,7 @@ function getTransactionAddresses(transaction: HeliusTransaction): {
 
 const deflowProgramId = "DF1ow4tspfHX9JwWJsAb9epbkA8hmpSEAtxXy1V27QBH";
 
-const parseMissedSwapTransaction = (transaction: HeliusTransaction) => {
+const parseMissedSwapTransaction = async (agent: SolanaAgentKit, transaction: HeliusTransaction) => {
   const totalFrom = transaction.tokenTransfers.reduce((acc, transfer) => {
     if (transfer.fromUserAccount === transaction.feePayer) {
       return acc + transfer.tokenAmount;
@@ -143,6 +144,8 @@ const parseMissedSwapTransaction = (transaction: HeliusTransaction) => {
   const initialToken = transaction.tokenTransfers[0];
   const finalToken =
     transaction.tokenTransfers[transaction.tokenTransfers.length - 1];
+  const initialTokenData = await getToken(agent, initialToken.mint);
+  const finalTokenData = await getToken(agent, finalToken.mint);
   return {
     signature: transaction.signature,
     timestamp: transaction.timestamp,
@@ -154,7 +157,7 @@ const parseMissedSwapTransaction = (transaction: HeliusTransaction) => {
     tokenMint: transaction.tokenTransfers[0].mint,
     from: transaction.feePayer,
     to: transaction.feePayer,
-    description: `Swapped ${totalFrom} ${initialToken.mint} for ${totalTo} ${finalToken.mint}`,
+    description: `${transaction.feePayer} swapped ${totalFrom} ${initialTokenData.symbol} for ${totalTo} ${finalTokenData.symbol}`,
     source: transaction.source,
   };
 };
@@ -213,8 +216,15 @@ export default async function getTransactionHistory(
       // check if the transaction is a swap and missed by helius
       const missedSwap = checkMissedSwap(transaction);
       if (missedSwap) {
-        const missedSwapTransaction = parseMissedSwapTransaction(transaction);
-        transactionHistory.push(missedSwapTransaction);
+        try {
+        const missedSwapTransaction = await parseMissedSwapTransaction(
+          agent,
+          transaction
+          );
+          transactionHistory.push(missedSwapTransaction);
+        } catch (error) {
+          console.error("Error parsing missed swap transaction:", error);
+        }
         continue;
       }
 
