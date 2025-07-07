@@ -101,7 +101,7 @@ function extractTransactionAmount(transaction: HeliusTransaction): {
   return { amount: 0, tokenSymbol: "SOL" };
 }
 
-function getTransactionAddresses(transaction: HeliusTransaction): {
+function getTransactionAddresses(agent: SolanaAgentKit, transaction: HeliusTransaction): {
   from?: string;
   to?: string;
 } {
@@ -120,6 +120,13 @@ function getTransactionAddresses(transaction: HeliusTransaction): {
     return {
       from: nativeTransfer.fromUserAccount,
       to: nativeTransfer.toUserAccount,
+    };
+  }
+
+  if(transaction.type === "COMPRESSED_NFT_MINT"){
+    return {
+      from: transaction.feePayer,
+      to: agent.wallet.publicKey.toBase58(),
     };
   }
 
@@ -230,7 +237,7 @@ export default async function getTransactionHistory(
 
       const { amount, tokenSymbol, tokenMint } =
         extractTransactionAmount(transaction);
-      const { from, to } = getTransactionAddresses(transaction);
+      const { from, to } = getTransactionAddresses(agent, transaction);
 
       transactionHistory.push({
         signature: transaction.signature,
@@ -242,8 +249,8 @@ export default async function getTransactionHistory(
         amount,
         tokenSymbol,
         tokenMint,
-        from,
-        to,
+        from: from || 'UNKNOWN',
+        to: to || 'UNKNOWN',
         description: transaction.description,
         source: transaction.source,
       });
