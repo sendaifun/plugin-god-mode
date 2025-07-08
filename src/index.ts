@@ -100,6 +100,9 @@ import claimMeteoraCreatorFeeAction from "./meteora/action/claimMeteoraCreateFee
 
 // crossmint
 import checkout from "./crossmint/tools/checkout";
+import confirmOrder from "./crossmint/tools/confirm-order";
+import confirmOrderAction from "./crossmint/actions/confirmOrderAction";
+import checkoutAction from "./crossmint/actions/checkoutAction";
 
 // Define and export the plugin
 const GodModePlugin = {
@@ -139,6 +142,7 @@ const GodModePlugin = {
     launchMeteoraToken,
     getTransactionHistory,
     checkout,
+    confirmOrder,
   },
 
   // Combine all actions
@@ -175,6 +179,8 @@ const GodModePlugin = {
       getLOsAction,
       getTransactionHistoryAction,
       launchMeteoraTokenAction,
+      checkoutAction,
+      confirmOrderAction,
     ],
     "godmode"
   ),
