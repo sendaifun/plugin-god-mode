@@ -3,7 +3,7 @@ import { VersionedTransaction } from "@solana/web3.js";
 import { SolanaAgentKit } from "solana-agent-kit";
 import { CROSSMINT_PRODUCTION_API_URL } from "../constants";
 import { CreateOrderRequest, CreateOrderResponse, Order, PhysicalAddress } from "../types";
-import confirmOrderTool from "./utils/confirm-order";
+import confirmOrder from "./confirm-order";
 
 /**
  * Create an Amazon order via Crossmint API
@@ -95,7 +95,7 @@ export default async function checkout(
       skipPreflight: true,
     });
 
-    const orderConfirmation = await confirmOrderTool(agent, orderResponse.orderId, true);
+    const orderConfirmation = await confirmOrder(agent, orderResponse.orderId, true);
 
     if (!orderConfirmation.order) {
       return {
