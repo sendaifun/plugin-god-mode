@@ -42,7 +42,7 @@ import luloGetApy from "./lulo/tools/luloGetApy";
 import luloGetBalanceAction from "./lulo/actions/luloGetBalanceAction";
 import getLuloBalance from "./lulo/tools/getLuloBalance";
 
-// pumpfun 
+// pumpfun
 // import launchPumpFunToken from "./pumpfun/tools/launchPumpfunToken";
 // import launchPumpfunTokenAction from "./pumpfun/actions/launchPumpfunTokenAction";
 // import claimCreatorFeeAction from "./pumpfun/actions/claimCreatorFeeAction";
@@ -98,6 +98,12 @@ import launchMeteoraTokenAction from "./meteora/action/launchMeteoraTokenAction"
 import claimMeteoraCreatorFee from "./meteora/tools/claimMeteoraCreatorFee";
 import claimMeteoraCreatorFeeAction from "./meteora/action/claimMeteoraCreateFeeAction";
 
+// crossmint
+import checkout from "./crossmint/tools/checkout";
+import confirmOrder from "./crossmint/tools/confirm-order";
+import confirmOrderAction from "./crossmint/actions/confirmOrderAction";
+import checkoutAction from "./crossmint/actions/checkoutAction";
+
 // Define and export the plugin
 const GodModePlugin = {
   name: "godmode",
@@ -135,6 +141,8 @@ const GodModePlugin = {
     getLOs,
     launchMeteoraToken,
     getTransactionHistory,
+    checkout,
+    confirmOrder,
   },
 
   // Combine all actions
@@ -171,6 +179,8 @@ const GodModePlugin = {
       getLOsAction,
       getTransactionHistoryAction,
       launchMeteoraTokenAction,
+      checkoutAction,
+      confirmOrderAction,
     ],
     "godmode"
   ),
