@@ -25,25 +25,41 @@ export default async function sell(
   const inputDecimals = (await getMint(agent.connection, inputMint)).decimals;
   const scaledAmount = inputAmount * Math.pow(10, inputDecimals);
 
-    const orderResponse: JupiterUltraOrderResponse = await (
-      await fetch(
-        `${JUP_ULTRA_API}/order?` +
-          `inputMint=${inputMint.toString()}` +
-          `&outputMint=${TOKENS.SOL.toString()}` +
-          `&amount=${scaledAmount}` +
-          `&taker=${agent.wallet.publicKey.toString()}`  + 
-          `&referralAccount=${JUP_REFERRAL_ADDRESS}` + 
-          `&referralFee=100`,
-          {
-            headers: {
-              'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
-            },
-          }
-      )
-    ).json();
+    const response = await fetch(
+      `${JUP_ULTRA_API}/order?` +
+        `inputMint=${inputMint.toString()}` +
+        `&outputMint=${TOKENS.SOL.toString()}` +
+        `&amount=${scaledAmount}` +
+        `&taker=${agent.wallet.publicKey.toString()}`  + 
+        `&referralAccount=${JUP_REFERRAL_ADDRESS}` + 
+        `&referralFee=100`,
+        {
+          headers: {
+            'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+          },
+        }
+    );
+
+    // if jup api throws 400, then route not found error
+    if (response.status === 400) {
+      throw new Error("Route not found");
+    }
+
+    const orderResponse: JupiterUltraOrderResponse = await response.json();
+
+  // Check for insufficient funds error
+  if (orderResponse.errorMessage === "Taker has insufficient input") {
+    throw new Error("You have insufficient funds");
+  } else if (orderResponse.errorMessage) {
+    throw new Error(orderResponse.errorMessage);
+  }
 
   const requestId = orderResponse.requestId;
   const swapTransaction = orderResponse.transaction;
+
+  if (!swapTransaction) {
+    throw new Error("Swap transaction not found");
+  }
 
   const swapTransactionBuffer = Buffer.from(swapTransaction, "base64");
   const transaction = VersionedTransaction.deserialize(swapTransactionBuffer);

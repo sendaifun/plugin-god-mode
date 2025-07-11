@@ -4,10 +4,12 @@ import {
   getAccount,
   getAssociatedTokenAddress,
   getMint,
+  TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
 import { type PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
+import getMintInfo from "../../helpers/token/getMint";
 
 /**
  * Transfer SOL or SPL tokens to a recipient
@@ -26,15 +28,28 @@ export default async function transfer_spl(
   try {
 
     const transaction = new Transaction();
+    
+    // Get mint info to determine if it's a Token-2022 mint
+    const mintInfo = await getMintInfo(agent, mint);
+    const isToken2022 = mintInfo.standard === "token-2022";
+    const tokenProgramId = isToken2022 ? TOKEN_2022_PROGRAM_ID : undefined;
+    
     // Transfer SPL token
     const fromAta = await getAssociatedTokenAddress(
       mint,
       agent.wallet.publicKey,
+      false,
+      tokenProgramId,
     );
-    const toAta = await getAssociatedTokenAddress(mint, to);
+    const toAta = await getAssociatedTokenAddress(
+      mint, 
+      to,
+      false,
+      tokenProgramId,
+    );
 
     try {
-      await getAccount(agent.connection, toAta);
+      await getAccount(agent.connection, toAta, "confirmed", tokenProgramId);
     } catch {
       transaction.add(
         createAssociatedTokenAccountInstruction(
@@ -42,12 +57,12 @@ export default async function transfer_spl(
           toAta,
           to,
           mint,
+          tokenProgramId,
         ),
       );
     }
 
-    // Get mint info to determine decimals
-    const mintInfo = await getMint(agent.connection, mint);
+    // Use the mint info we already retrieved
     const adjustedAmount = amount * Math.pow(10, mintInfo.decimals);
 
     transaction.add(
@@ -56,6 +71,8 @@ export default async function transfer_spl(
         toAta,
         agent.wallet.publicKey,
         adjustedAmount,
+        [],
+        tokenProgramId,
       ),
     );
 

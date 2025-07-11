@@ -103,9 +103,9 @@ export interface JupiterOrderHistoryResponse {
 }
 
 export interface JupiterUltraOrderResponse {
-  mode: string;
+  mode?: string;
   swapType: string;
-  router: string;
+  router?: string;
   requestId: string;
   inAmount: string;
   outAmount: string;
@@ -130,9 +130,22 @@ export interface JupiterUltraOrderResponse {
   outputMint: string;
   feeMint: string;
   feeBps: number;
-  taker: string;
+  taker?: string;
   gasless: boolean;
-  transaction: string;
+  transaction?: string;
   prioritizationFeeLamports: number;
   totalTime: number;
+  quoteId: string;
+  maker: string;
+  expireAt: string;
+  platformFee: {
+    amount: string;
+    feeBps: number;
+  };
+  errorMessage?: string;
+  dynamicSlippageReport: {
+    slippageBps: number;
+    categoryName: string;
+    heuristicMaxSlippageBps: number;
+  };
 }
