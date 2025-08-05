@@ -37,6 +37,7 @@ describe("launchSendShot", () => {
             twitter: "https://twitter.com/test",
             telegram: "https://t.me/test",
             website: "https://example.com",
+            referal: "raycast",
         };
 
         const result = await launchSendShot(
@@ -48,7 +49,8 @@ describe("launchSendShot", () => {
             input.amount,
             input.twitter,
             input.telegram,
-            input.website
+            input.website,
+            input.referal,
         );
         // The actual result may vary depending on the on-chain response
         expect(result).toBeDefined();

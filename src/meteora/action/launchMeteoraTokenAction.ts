@@ -44,10 +44,11 @@ const launchMeteoraTokenAction: Action = {
         telegram: z.string().optional().describe("Telegram group link (optional)"),
         website: z.string().url().optional().describe("Website URL (optional)"),
         amount: z.number().optional().describe("Amount of SOL to buy tokens (optional)"),
+        referal: z.string().optional().describe("Platform of token launch (optional)")
     }),
     handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
         try {
-            const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount } =
+            const { tokenName, tokenTicker, description, imageUrl, twitter, telegram, website, amount, referal } =
                 input;
 
 
@@ -64,7 +65,8 @@ const launchMeteoraTokenAction: Action = {
                 amount,
                 twitter,
                 telegram,
-                website
+                website,
+                referal
             );
 
             return {
