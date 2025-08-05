@@ -17,7 +17,7 @@ export default async function launchMeteoraToken(
   twitter?: string,
   telegram?: string,
   website?: string,
-  referal?: string
+  referral?: string
 ) {
   try {
     const response = await fetch(
@@ -40,7 +40,7 @@ export default async function launchMeteoraToken(
           twitter: twitter,
           telegram: telegram,
           website: website,
-          refferal: referal,
+          refferal: referral,
         }),
       }
     );
