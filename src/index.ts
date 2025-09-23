@@ -104,6 +104,10 @@ import confirmOrder from "./crossmint/tools/confirm-order";
 import confirmOrderAction from "./crossmint/actions/confirmOrderAction";
 import checkoutAction from "./crossmint/actions/checkoutAction";
 
+// polymarket
+import listMarkets from "./polymarket/tools/listMarkets";
+import listMarketsAction from "./polymarket/actions/listMarketsAction";
+
 // Define and export the plugin
 const GodModePlugin = {
   name: "godmode",
@@ -143,6 +147,7 @@ const GodModePlugin = {
     getTransactionHistory,
     checkout,
     confirmOrder,
+    listMarkets,
   },
 
   // Combine all actions
@@ -181,6 +186,7 @@ const GodModePlugin = {
       launchMeteoraTokenAction,
       checkoutAction,
       confirmOrderAction,
+      listMarketsAction,
     ],
     "godmode"
   ),
