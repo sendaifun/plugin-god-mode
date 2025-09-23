@@ -75,6 +75,8 @@ import getTokenBalance from "./wallet/tools/getTokenBalance";
 
 import getWalletAddress from "./wallet/tools/getWalletAddress";
 import getWalletAddressAction from "./wallet/actions/getWalletAddressAction";
+import getEvmAddress from "./wallet/tools/getEvmAddress";
+import getEvmAddressAction from "./wallet/actions/getEvmAddressAction";
 
 import transferSPLAction from "./wallet/actions/transferSPLAction";
 import transferSPL from "./wallet/tools/transferSPL";
@@ -126,6 +128,7 @@ const GodModePlugin = {
     getLuloBalance,
     getSolBalance,
     getWalletAddress,
+    getEvmAddress,
     getTokenBalance,
     transferSPL,
     transfer,
@@ -166,6 +169,7 @@ const GodModePlugin = {
       getSolBalanceAction,
       getTokenBalanceAction,
       getWalletAddressAction,
+      getEvmAddressAction,
       transferSPLAction,
       transferAction,
       rugcheckAction,
