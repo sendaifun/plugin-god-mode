@@ -15,7 +15,7 @@ export default async function placeOrder(
   params: PlaceOrderParams
 ): Promise<CreateOrderResponse> {
   // Check if EVM wallet is available
-  const evmWallet = (agent as unknown as { evmWallet?: { address?: string } }).evmWallet;
+  const evmWallet = agent.evmWallet;
   
   if (!evmWallet || !evmWallet.address) {
     throw new Error("EVM wallet required for placing orders on Polymarket. Please initialize agent with an evmWallet.");
