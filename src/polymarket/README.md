@@ -1,0 +1,4 @@
+- list markets with all the configurable filters
+- get active trades
+- bridge to the polygon - all bridge
+- place trade

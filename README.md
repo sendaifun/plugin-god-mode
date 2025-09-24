@@ -62,6 +62,11 @@ Just like the legendary cheat code, GOD Mode gives you access to every essential
 ### DeBridge Cross-Chain
 - `bridge` — Bridge assets cross-chain (referral fees, redirects to website)
 
+### Polymarket Prediction Markets
+- `getActiveMarkets` — Get all active prediction markets (**read-only, no fees**)
+- `getMarketDetails` — Get detailed information for a specific market (**read-only, no fees**)
+- `getMarketOrderbook` — Get orderbook data for market trading (**read-only, no fees**)
+
 ## Available Modules (Future Integration)
 
 The following modules are present in the codebase and may be integrated in future versions:

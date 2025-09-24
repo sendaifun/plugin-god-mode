@@ -75,6 +75,8 @@ import getTokenBalance from "./wallet/tools/getTokenBalance";
 
 import getWalletAddress from "./wallet/tools/getWalletAddress";
 import getWalletAddressAction from "./wallet/actions/getWalletAddressAction";
+import getEvmAddress from "./wallet/tools/getEvmAddress";
+import getEvmAddressAction from "./wallet/actions/getEvmAddressAction";
 
 import transferSPLAction from "./wallet/actions/transferSPLAction";
 import transferSPL from "./wallet/tools/transferSPL";
@@ -104,6 +106,12 @@ import confirmOrder from "./crossmint/tools/confirm-order";
 import confirmOrderAction from "./crossmint/actions/confirmOrderAction";
 import checkoutAction from "./crossmint/actions/checkoutAction";
 
+// polymarket
+import listMarkets from "./polymarket/tools/listMarkets";
+import listMarketsAction from "./polymarket/actions/listMarketsAction";
+import { getTrades, placeOrder, getOrderBook } from "./polymarket/tools";
+import { getTradesAction, placeOrderAction, getOrderBookAction } from "./polymarket/actions";
+
 // Define and export the plugin
 const GodModePlugin = {
   name: "godmode",
@@ -122,6 +130,7 @@ const GodModePlugin = {
     getLuloBalance,
     getSolBalance,
     getWalletAddress,
+    getEvmAddress,
     getTokenBalance,
     transferSPL,
     transfer,
@@ -143,6 +152,10 @@ const GodModePlugin = {
     getTransactionHistory,
     checkout,
     confirmOrder,
+    listMarkets,
+    getTrades,
+    placeOrder,
+    getOrderBook,
   },
 
   // Combine all actions
@@ -161,6 +174,7 @@ const GodModePlugin = {
       getSolBalanceAction,
       getTokenBalanceAction,
       getWalletAddressAction,
+      getEvmAddressAction,
       transferSPLAction,
       transferAction,
       rugcheckAction,
@@ -181,6 +195,10 @@ const GodModePlugin = {
       launchMeteoraTokenAction,
       checkoutAction,
       confirmOrderAction,
+      listMarketsAction,
+      getTradesAction,
+      placeOrderAction,
+      getOrderBookAction,
     ],
     "godmode"
   ),

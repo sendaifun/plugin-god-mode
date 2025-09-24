@@ -40,3 +40,5 @@
 14. Jito Bundles
 
 15. Onramp
+
+16. Polymarket prediction markets — Get market data, orderbook, and market details
