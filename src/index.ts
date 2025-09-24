@@ -111,6 +111,8 @@ import checkoutAction from "./crossmint/actions/checkoutAction";
 // polymarket
 import listMarkets from "./polymarket/tools/listMarkets";
 import listMarketsAction from "./polymarket/actions/listMarketsAction";
+import { getTrades, placeOrder, getOrderBook } from "./polymarket/tools";
+import { getTradesAction, placeOrderAction, getOrderBookAction } from "./polymarket/actions";
 
 // Define and export the plugin
 const GodModePlugin = {
@@ -157,6 +159,9 @@ const GodModePlugin = {
     checkout,
     confirmOrder,
     listMarkets,
+    getTrades,
+    placeOrder,
+    getOrderBook,
   },
 
   // Combine all actions
@@ -201,6 +206,9 @@ const GodModePlugin = {
       checkoutAction,
       confirmOrderAction,
       listMarketsAction,
+      getTradesAction,
+      placeOrderAction,
+      getOrderBookAction,
     ],
     "godmode"
   ),

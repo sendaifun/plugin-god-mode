@@ -266,3 +266,92 @@ export interface ListMarketsParams {
 
 // Response type for list markets
 export type ListMarketsResponse = PolymarketMarket[];
+
+// Trading-related types
+export interface PolymarketTrade {
+  id: string;
+  market: string;
+  asset_id: string;
+  side: 'BUY' | 'SELL';
+  size: string;
+  price: string;
+  fee_paid: string;
+  timestamp: string;
+  outcome: string;
+  bucket: string;
+  owner: string;
+  maker_address: string;
+  taker_address: string;
+  trader_side: string;
+  match_time: string;
+  transaction_hash: string;
+}
+
+export interface GetTradesParams {
+  next_cursor?: string;
+  market?: string;
+  asset_id?: string;
+  maker?: string;
+  taker?: string;
+  start_ts?: string;
+  end_ts?: string;
+  limit?: number;
+}
+
+export interface GetTradesResponse {
+  next_cursor: string;
+  data: PolymarketTrade[];
+}
+
+// Order-related types
+export interface PolymarketOrderArgs {
+  tokenID: string;
+  price: number;
+  side: 'BUY' | 'SELL';
+  size: number;
+  feeRateBps?: number;
+  nonce?: string;
+  expiration?: string;
+}
+
+export interface PolymarketOrder {
+  salt: number;
+  maker: string;
+  signer: string;
+  taker: string;
+  tokenId: string;
+  makerAmount: string;
+  takerAmount: string;
+  expiration: string;
+  nonce: string;
+  feeRateBps: string;
+  side: string;
+  signatureType: number;
+  signature: string;
+}
+
+export interface CreateOrderResponse {
+  success: boolean;
+  errorMsg?: string;
+  orderId?: string;
+  orderHashes?: string[];
+  status?: 'matched' | 'live' | 'delayed' | 'unmatched';
+}
+
+export interface PlaceOrderParams {
+  tokenId: string;
+  price: number;
+  side: 'BUY' | 'SELL';
+  size: number;
+  orderType?: 'GTC' | 'FOK' | 'FAK' | 'GTD';
+  feeRateBps?: number;
+}
+
+export interface CancelOrderParams {
+  orderIds: string[];
+}
+
+export interface CancelOrderResponse {
+  success: boolean;
+  errorMsg?: string;
+}
