@@ -77,8 +77,6 @@ import getWalletAddress from "./wallet/tools/getWalletAddress";
 import getWalletAddressAction from "./wallet/actions/getWalletAddressAction";
 import getEvmAddress from "./wallet/tools/getEvmAddress";
 import getEvmAddressAction from "./wallet/actions/getEvmAddressAction";
-import { evmSignMessage, evmSignTypedData, evmSignTransaction, evmSendTransaction } from "./wallet/tools";
-import { evmSignMessageAction, evmSignTypedDataAction, evmSignTransactionAction, evmSendTransactionAction } from "./wallet/actions";
 
 import transferSPLAction from "./wallet/actions/transferSPLAction";
 import transferSPL from "./wallet/tools/transferSPL";
@@ -133,10 +131,6 @@ const GodModePlugin = {
     getSolBalance,
     getWalletAddress,
     getEvmAddress,
-    evmSignMessage,
-    evmSignTypedData,
-    evmSignTransaction,
-    evmSendTransaction,
     getTokenBalance,
     transferSPL,
     transfer,
@@ -181,10 +175,6 @@ const GodModePlugin = {
       getTokenBalanceAction,
       getWalletAddressAction,
       getEvmAddressAction,
-      evmSignMessageAction,
-      evmSignTypedDataAction,
-      evmSignTransactionAction,
-      evmSendTransactionAction,
       transferSPLAction,
       transferAction,
       rugcheckAction,
