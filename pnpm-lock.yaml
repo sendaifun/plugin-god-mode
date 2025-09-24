@@ -53,9 +53,6 @@ importers:
       solana-agent-kit:
         specifier: ^2.0.0
         version: 2.0.6(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react@19.1.0)(typescript@5.9.2)(utf-8-validate@5.0.10)
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
       zod:
         specifier: ^3.24.4
         version: 3.25.30
