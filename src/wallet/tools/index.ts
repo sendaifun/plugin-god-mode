@@ -5,3 +5,7 @@ export * from "./getTokenBalance";
 export * from "./getWalletAddress";
 export * from "./getPortfolio";
 export * from "./getEvmAddress";
+export { default as evmSignMessage } from "./evmSignMessage";
+export { default as evmSignTypedData } from "./evmSignTypedData";
+export { default as evmSignTransaction } from "./evmSignTransaction";
+export { default as evmSendTransaction } from "./evmSendTransaction";

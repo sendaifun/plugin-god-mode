@@ -4,3 +4,7 @@ export * from "./getTokenBalanceAction";
 export * from "./getWalletAddressAction";
 export * from "./getPortfolioAction";
 export * from "./getEvmAddressAction";
+export { default as evmSignMessageAction } from "./evmSignMessageAction";
+export { default as evmSignTypedDataAction } from "./evmSignTypedDataAction";
+export { default as evmSignTransactionAction } from "./evmSignTransactionAction";
+export { default as evmSendTransactionAction } from "./evmSendTransactionAction";
