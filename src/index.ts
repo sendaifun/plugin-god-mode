@@ -60,6 +60,10 @@ import sanctumGetLSTAPYAction from "./sanctum/actions/sanctumGetLSTAPYAction";
 import getTopLSTAction from "./sanctum/actions/getTopLSTAction";
 import getTopLST from "./sanctum/tools/getTopLST";
 
+// kamino
+import getKaminoSupplyApy from "./kamino/tools/getKaminoSupplyApy";
+import getKaminoSupplyApyAction from "./kamino/actions/getKaminoSupplyApyAction";
+
 // solana
 import getPortfolioAction from "./wallet/actions/getPortfolioAction";
 import getPortfolio from "./wallet/tools/getPortfolio";
@@ -137,6 +141,7 @@ const GodModePlugin = {
     rugcheck,
     sanctumGetLSTAPY,
     getTopLST,
+    getKaminoSupplyApy,
     getPortfolio,
     getSolPrice,
     luloGetApy,
@@ -180,6 +185,7 @@ const GodModePlugin = {
       rugcheckAction,
       sanctumGetLSTAPYAction,
       getTopLSTAction,
+      getKaminoSupplyApyAction,
       getPortfolioAction,
       getSolPriceAction,
       luloGetApyAction,
