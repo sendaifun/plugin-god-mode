@@ -1,12 +1,7 @@
 import { getMint } from "@solana/spl-token";
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { type SolanaAgentKit, signOrSendTX } from "solana-agent-kit";
-import {
-  JUP_ULTRA_API,
-  JUP_API,
-  JUP_REFERRAL_ADDRESS,
-  TOKENS,
-} from "./utils/constants";
+import { JUP_ULTRA_API, JUP_API, JUP_REFERRAL_ADDRESS, TOKENS } from "./utils/constants";
 import { type JupiterUltraOrderResponse } from "../types";
 
 /**
@@ -19,36 +14,35 @@ import { type JupiterUltraOrderResponse } from "../types";
 export default async function buy(
   agent: SolanaAgentKit,
   outputMint: PublicKey,
-  inputAmount: number,
+  inputAmount: number
 ) {
   const inputMint = TOKENS.SOL;
   const inputDecimals = 9;
-    const scaledAmount = inputAmount * Math.pow(10, inputDecimals);
+  const scaledAmount = inputAmount * Math.pow(10, inputDecimals);
 
-    const response = await fetch(
-      `${JUP_ULTRA_API}/order?` +
-        `inputMint=${inputMint.toString()}` +
-        `&outputMint=${outputMint.toString()}` +
-        `&amount=${scaledAmount}` +
-        `&taker=${agent.wallet.publicKey.toString()}` +
-        `&referralAccount=${JUP_REFERRAL_ADDRESS}` + 
-        `&referralFee=100`,
-        {
-          headers: {
-            'x-api-key': agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
-          },
-        }
-    );
-
-    // if jup api throws 400, then route not found error
-    if (response.status === 400) {
-      throw new Error("Route not found");
+  const response = await fetch(
+    `${JUP_ULTRA_API}/order?` +
+      `inputMint=${inputMint.toString()}` +
+      `&outputMint=${outputMint.toString()}` +
+      `&amount=${scaledAmount}` +
+      `&taker=${agent.wallet.publicKey.toString()}` +
+      `&referralAccount=${JUP_REFERRAL_ADDRESS}` +
+      `&referralFee=100`,
+    {
+      headers: {
+        "x-api-key": agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
+      },
     }
+  );
 
-    const orderResponse: JupiterUltraOrderResponse = await response.json();
+  // if jup api throws 400, then route not found error
+  if (response.status === 400) {
+    throw new Error("Route not found");
+  }
+
+  const orderResponse: JupiterUltraOrderResponse = await response.json();
 
   // if jup api throws 400, then order is not valid
-
 
   // Check for insufficient funds error
   if (orderResponse.errorMessage === "Taker has insufficient input") {
@@ -74,6 +68,7 @@ export default async function buy(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
       },
       body: JSON.stringify({
         signedTransaction: signedTx,

@@ -30,14 +30,11 @@ export const JUP_API = "https://quote-api.jup.ag/v6";
 /**
  * Jupiter Ultra API URL
  */
-export const JUP_ULTRA_API = "https://lite-api.jup.ag/ultra/v1";
+export const JUP_ULTRA_API = "https://api.jup.ag/ultra/v1/";
 
-export const JUP_REFERRAL_ADDRESS =
-  "JBbc8MBy1KiVAbqbk1BPKdXxV6jRT4PWUgKnMb1KXFc1";
+export const JUP_REFERRAL_ADDRESS = "JBbc8MBy1KiVAbqbk1BPKdXxV6jRT4PWUgKnMb1KXFc1";
 
 export const METEORA_DYNAMIC_AMM_PROGRAM_ID = new PublicKey(
-  "Eo7WjKq67rjJQSZxS6z3YkapzY3eMj6Xy8X5EQVn5UaB",
+  "Eo7WjKq67rjJQSZxS6z3YkapzY3eMj6Xy8X5EQVn5UaB"
 );
-export const METEORA_DLMM_PROGRAM_ID = new PublicKey(
-  "LbVRzDTvBDEcrthxfZ4RL6yiq3uZw8bS6MwtdY6UhFQ",
-);
+export const METEORA_DLMM_PROGRAM_ID = new PublicKey("LbVRzDTvBDEcrthxfZ4RL6yiq3uZw8bS6MwtdY6UhFQ");
