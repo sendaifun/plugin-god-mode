@@ -71,6 +71,7 @@ export default async function sell(
     await fetch(`${JUP_ULTRA_API}/execute`, {
       method: "POST",
       headers: {
+        "x-api-key": agent.config.OTHER_API_KEYS?.JUPITER_API_KEY || "",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
