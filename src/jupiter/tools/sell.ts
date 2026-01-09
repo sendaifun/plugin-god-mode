@@ -8,6 +8,7 @@ import {
   TOKENS,
 } from "./utils/constants";
 import { type JupiterUltraOrderResponse } from "../types";
+import getMintInfo from "src/helpers/token/getMint";
 
 /**
  * Sell tokens using Jupiter Exchange
@@ -22,7 +23,7 @@ export default async function sell(
   inputAmount: number,
   inputMint: PublicKey,
 ) {
-  const inputDecimals = (await getMint(agent.connection, inputMint)).decimals;
+  const inputDecimals = (await getMintInfo(agent, inputMint)).decimals;
   const scaledAmount = inputAmount * Math.pow(10, inputDecimals);
 
     const response = await fetch(
